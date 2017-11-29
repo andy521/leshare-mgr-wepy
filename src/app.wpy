@@ -15,56 +15,17 @@
       // 注册中间件
       this.use('requestfix');
       this.use('promisify');
-//      this.intercept('request', {
-//        config(p) {
-//          p.header = this.createAuthHeader();
-//          return p;
-//        }
-//      });
-//      this.intercept('uploadFile', {
-//        config(p) {
-//          p.header = this.createAuthHeader();
-//          return p;
-//        },
-//        success(p) {
-//          return p.data;
-//        }
-//      });
     }
-
-//    /**
-//     * 构造权限头部
-//     */
-//    createAuthHeader() {
-//      const loginCode = wepy.$instance.globalData.auth.login_code;
-//      const header = {};
-//      if (loginCode) {
-//        header['login_code'] = loginCode;
-//      }
-//      return header;
-//    }
-//
-//    onLaunch() {
-//      this.syncStoreConfig({'login_code': 'login_code'}, 'login_code');
-//    }
-//
-//    syncStoreConfig(obj, key) {
-//      const value = wepy.getStorageSync(obj[key]);
-//      if (value !== '') {
-//        wepy.$instance.globalData.auth[key] = value;
-//      }
-//    }
 
     globalData = {
       auth: {},
       app_code: '8ZXSbN4YbolpqKk93VYPc5iUaSRk1ied',
-      // baseUrl: 'https://api.leshare.shop/v2/seller'
-      // baseUrl: 'http://192.168.31.124:9999/v2/seller'
-      baseUrl: 'http://106.14.195.68:9999/v2/seller'
+      baseUrl: 'https://wx.leshare.shop/open'
     };
     config = {
       pages: [
-        'pages/draft/list'
+        'pages/draft/list',
+        'pages/template/list'
       ],
       window: {
         backgroundTextStyle: 'dark',

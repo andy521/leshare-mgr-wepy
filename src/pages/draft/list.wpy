@@ -3,12 +3,16 @@
 
 <script>
   import wepy from 'wepy';
+  import open from '../../api/open';
   import base from '../../mixins/base';
 
   export default class DraftList extends wepy.page {
     data = {
+      drafts: null
     };
-    onLoad (options) {
+    async onLoad (options) {
+      this.drafts = await open.drafts();
+      this.loaded();
     };
     methods = {};
     components = {};
