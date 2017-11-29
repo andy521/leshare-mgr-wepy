@@ -5,7 +5,7 @@
   import wepy from 'wepy';
   import base from '../../mixins/base';
 
-  export default class DraftList extends wepy.page {
+  export default class TemplateList extends wepy.page {
     data = {
     };
     onLoad (options) {
@@ -15,7 +15,7 @@
     computed = {};
     mixins = [base];
     config = {
-      navigationBarTitleText: '草稿箱'
+      navigationBarTitleText: '模板列表'
     };
   }
 </script>
