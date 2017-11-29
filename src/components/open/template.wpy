@@ -10,7 +10,7 @@
       <text class="xs muted">{{template.create_time}} - {{template.user_version}} </text>
     </view>
 
-    <view class="zan-btn zan-btn--small zan-btn--disabled">删除</view>
+    <view class="zan-btn zan-btn--small">删除</view>
   </view>
 </template>
 
