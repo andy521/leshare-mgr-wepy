@@ -16,9 +16,13 @@ export default class open extends base {
   /**
    * 查询所有模板
    */
-  static templates() {
+  static async templates() {
     const url = `${open.baseUrl}/code/template_list`;
-    return this.get(url);
+    const templates = await this.get(url);
+    templates.forEach(template => {
+      template.create_time = this.convertToTime(template.create_time);
+    });
+    return templates;
   }
 
   // 处理时间
