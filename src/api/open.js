@@ -28,6 +28,6 @@ export default class open extends base {
   // 处理时间
   static convertToTime (time) {
     const d = new Date(time * 1000);
-    return `${d.getFullYear()}/${d.getMonth()}/${d.getDay()} ${d.getHours()}:${d.getMinutes()}`;
+    return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDay()} ${d.getHours()}:${d.getMinutes()}`;
   }
 }
