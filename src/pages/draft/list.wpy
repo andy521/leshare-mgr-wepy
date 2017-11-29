@@ -1,21 +1,27 @@
 <template>
+  <repeat for="{{drafts}}" key="index" index="index" item="item">
+    <Draft :draft.sync="item"/>
+  </repeat>
 </template>
 
 <script>
   import wepy from 'wepy';
   import open from '../../api/open';
   import base from '../../mixins/base';
+  import Draft from '../../components/open/draft';
 
   export default class DraftList extends wepy.page {
     data = {
       drafts: null
     };
-    async onLoad (options) {
+    async onLoad () {
       this.drafts = await open.drafts();
       this.loaded();
     };
     methods = {};
-    components = {};
+    components = {
+      Draft: Draft
+    };
     computed = {};
     mixins = [base];
     config = {

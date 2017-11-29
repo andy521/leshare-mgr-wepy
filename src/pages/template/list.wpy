@@ -1,17 +1,30 @@
 <template>
+    <repeat for="{{drafts}}" key="index" index="index" item="item">
+        <view class="row row-between bar">
+            <Open :open.sync="item"/>
+            <view class="zan-btn zan-btn--small">删除</view>
+        </view>
+    </repeat>
 </template>
 
 <script>
   import wepy from 'wepy';
   import base from '../../mixins/base';
+  import open from '../../api/open';
+  import Open from '../../components/open/draft'
 
   export default class TemplateList extends wepy.page {
     data = {
+      drafts: null
     };
-    onLoad (options) {
+    async onLoad (options) {
+      this.drafts = await open.drafts();
+      this.loaded();
     };
     methods = {};
-    components = {};
+    components = {
+      Open: Open
+    };
     computed = {};
     mixins = [base];
     config = {

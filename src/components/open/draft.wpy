@@ -1,0 +1,37 @@
+<template>
+  <view class="draft-box row-between">
+
+    <view class="column">
+      <view class="row">
+        <text class="lg">{{draft.user_desc}} </text>
+        <text class="sm muted ml20">#{{draft.draft_id}}</text>
+      </view>
+
+      <text class="xs muted">{{draft.create_time}} - {{draft.user_version}} </text>
+    </view>
+
+    <view class="zan-btn zan-btn--small zan-btn--primary">提交</view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+
+  export default class DraftItem extends wepy.component {
+    props = {
+      draft: {}
+    };
+  }
+</script>
+
+<style lang="scss">
+  @import "../../styles/variable";
+  .draft-box{
+    padding: 20rpx;
+    background-color: white;
+    margin-bottom: 10rpx;
+    border-top: $border;
+    border-bottom: $border;
+  }
+
+</style>
