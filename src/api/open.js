@@ -6,7 +6,7 @@ export default class open extends base {
    * 查询所有草稿
    */
   static async drafts() {
-    const url = `${open.baseUrl}/code/draft_list`;
+    const url = `${this.baseUrl}/code/draft_list`;
     const drafts = await this.get(url);
     drafts.sort((a, b) => b.create_time - a.create_time);
     drafts.forEach(draft => {
@@ -18,7 +18,7 @@ export default class open extends base {
    * 查询所有模板
    */
   static async templates() {
-    const url = `${open.baseUrl}/code/template_list`;
+    const url = `${this.baseUrl}/code/template_list`;
     const templates = await this.get(url);
     templates.sort((a, b) => b.create_time - a.create_time);
     templates.forEach(template => {
@@ -35,8 +35,8 @@ export default class open extends base {
   /****
    *提交草稿
    */
-  // static draftSubmit() {
-  //   const url = `${open.baseUrl}/code/template`;
-  //   return this.post(url, open);
-  // }
+  static submitDraft(draft) {
+    const url = `${open.baseUrl}/code/template`;
+    return this.post(url, draft);
+  }
 }

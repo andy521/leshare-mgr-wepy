@@ -8,16 +8,21 @@
   import wepy from 'wepy';
   import base from '../../mixins/base';
   import open from '../../api/open';
-  import Template from '../../components/open/template'
+  import Template from '../../components/open/template';
+  import Event from '../../utils/Event';
 
   export default class TemplateList extends wepy.page {
     data = {
       templates: null
     };
     async onLoad (options) {
+      await this.doLoad();
+      Event.listen(Event.TEMPLATE_LIST_UPDATE, this.doLoad.bind(this), this);
+    };
+    async doLoad () {
       this.templates = await open.templates();
       this.loaded();
-    };
+    }
     methods = {};
     components = {
       Template: Template
