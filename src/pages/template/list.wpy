@@ -1,6 +1,6 @@
 <template>
     <repeat for="{{templates}}" key="index" index="index" item="item">
-        <Template :template.sync="item"/>
+        <Template :template.sync="item" @deleted.user="deleted"/>
     </repeat>
 </template>
 
@@ -8,24 +8,43 @@
   import wepy from 'wepy';
   import base from '../../mixins/base';
   import open from '../../api/open';
-  import Template from '../../components/open/template'
+  import Template from '../../components/open/template';
+  import Event from '../../utils/Event';
+  import Tips from '../../utils/Tips'
 
   export default class TemplateList extends wepy.page {
     data = {
       templates: null
     };
-    async onLoad (options) {
+    async onLoad () {
+      await this.doLoad();
+      Event.listen(Event.TEMPLATE_LIST_UPDATE, this.doLoad.bind(this), this);
+    };
+    async doLoad() {
       this.templates = await open.templates();
       this.loaded();
+    }
+    async onPullDownRefresh () {
+      await this.doLoad();
+      wepy.stopPullDownRefresh();
+    }
+    methods = {
+      async deleted(template) {
+        await Tips.confirm('确定要删除该模板吗？');
+        template.create_time = null;
+        await open.deleteTemplate([template]);
+        await Tips.success('删除成功');
+        await this.doLoad();
+      }
     };
-    methods = {};
     components = {
       Template: Template
     };
     computed = {};
     mixins = [base];
     config = {
-      navigationBarTitleText: '模板列表'
+      navigationBarTitleText: '模板列表',
+      enablePullDownRefresh: true
     };
   }
 </script>

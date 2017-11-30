@@ -10,7 +10,7 @@
       <text class="xs muted">{{template.create_time}} - {{template.user_version}} </text>
     </view>
 
-    <view class="zan-btn zan-btn--small">删除</view>
+    <view class="zan-btn zan-btn--small" @tap.stop="deleted({{template}})">删除</view>
   </view>
 </template>
 
@@ -21,6 +21,11 @@
     props = {
       template: {}
     };
+    methods = {
+      async deleted(template) {
+        this.$emit('deleted', template);
+      }
+    }
   }
 </script>
 

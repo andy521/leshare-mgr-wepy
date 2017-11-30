@@ -1,6 +1,6 @@
 <template>
   <repeat for="{{drafts}}" key="index" index="index" item="item">
-    <Draft :draft.sync="item"/>
+    <Draft :draft.sync="item" @submit.user="submit"/>
   </repeat>
 </template>
 
@@ -10,6 +10,7 @@
   import base from '../../mixins/base';
   import Draft from '../../components/open/draft';
   import Event from '../../utils/Event'
+  import Tips from '../../utils/Tips'
 
   export default class DraftList extends wepy.page {
     data = {
@@ -17,7 +18,6 @@
     };
     async onLoad () {
       await this.doLoad();
-      Event.listen(Event.ORDER_LIST_UPDATE, this.doLoad.bind(this), this);
     };
     async doLoad () {
       this.drafts = await open.drafts();
@@ -27,7 +27,15 @@
       await this.doLoad();
       wepy.stopPullDownRefresh();
     }
-    methods = {};
+    methods = {
+      async submit(draft) {
+        await Tips.confirm('确定要提交该草稿吗？');
+        draft.create_time = null;
+        await open.submitDraft(draft);
+        await Tips.success('提交成功');
+        Event.emit(Event.TEMPLATE_LIST_UPDATE);
+      }
+    };
     components = {
       Draft: Draft
     };
