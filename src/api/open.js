@@ -8,6 +8,7 @@ export default class open extends base {
   static async drafts() {
     const url = `${open.baseUrl}/code/draft_list`;
     const drafts = await this.get(url);
+    drafts.sort((a, b) => b.create_time - a.create_time);
     drafts.forEach(draft => {
       draft.create_time = this.convertToTime(draft.create_time);
     });
@@ -19,6 +20,7 @@ export default class open extends base {
   static async templates() {
     const url = `${open.baseUrl}/code/template_list`;
     const templates = await this.get(url);
+    templates.sort((a, b) => b.create_time - a.create_time);
     templates.forEach(template => {
       template.create_time = this.convertToTime(template.create_time);
     });
@@ -28,6 +30,13 @@ export default class open extends base {
   // 处理时间
   static convertToTime (time) {
     const d = new Date(time * 1000);
-    return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDay()} ${d.getHours()}:${d.getMinutes()}`;
+    return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()} ${d.getHours()}:${d.getMinutes()}`;
   }
+  /****
+   *提交草稿
+   */
+  // static draftSubmit() {
+  //   const url = `${open.baseUrl}/code/template`;
+  //   return this.post(url, open);
+  // }
 }

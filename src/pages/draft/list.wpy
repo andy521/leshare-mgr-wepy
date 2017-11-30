@@ -9,15 +9,24 @@
   import open from '../../api/open';
   import base from '../../mixins/base';
   import Draft from '../../components/open/draft';
+  import Event from '../../utils/Event'
 
   export default class DraftList extends wepy.page {
     data = {
       drafts: null
     };
     async onLoad () {
+      await this.doLoad();
+      Event.listen(Event.ORDER_LIST_UPDATE, this.doLoad.bind(this), this);
+    };
+    async doLoad () {
       this.drafts = await open.drafts();
       this.loaded();
-    };
+    }
+    async onPullDownRefresh () {
+      await this.doLoad();
+      wepy.stopPullDownRefresh();
+    }
     methods = {};
     components = {
       Draft: Draft
@@ -25,7 +34,8 @@
     computed = {};
     mixins = [base];
     config = {
-      navigationBarTitleText: '草稿箱'
+      navigationBarTitleText: '草稿箱',
+      enablePullDownRefresh: true
     };
   }
 </script>

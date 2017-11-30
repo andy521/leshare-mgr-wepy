@@ -10,14 +10,34 @@
       <text class="xs muted">{{draft.create_time}} - {{draft.user_version}} </text>
     </view>
 
-    <view class="zan-btn zan-btn--small zan-btn--primary">提交</view>
+    <view class="zan-btn zan-btn--small zan-btn--primary" @tap.stop="submit({{draftId}})">提交</view>
   </view>
 </template>
 
 <script>
   import wepy from 'wepy';
+  import Tips from '../../utils/Tips';
+  import open from '../../api/open';
+  import Event from '../../utils/Event';
 
   export default class DraftItem extends wepy.component {
+    methods = {
+      async submit (draftId) {
+        await this.receive(draftId)
+        console.info()
+      }
+    }
+    async receive(draftId) {
+      await Tips.confirm('确定要提交该草稿吗？');
+      try {
+        await open.draftSubmit(draftId);
+        await Tips.success('提交成功');
+      } catch (e) {
+        console.info(e)
+        await Tips.error('操作失败');
+      }
+      Event.emit(Event.ORDER_LIST_UPDATE);
+    }
     props = {
       draft: {}
     };
