@@ -1,7 +1,18 @@
 <template>
-    <repeat for="{{templates}}" key="index" index="index" item="item">
-        <Template :template.sync="item" @deleted.user="deleted"/>
-    </repeat>
+  <repeat for="{{templates}}" key="index" index="index" item="item">
+      <!--4处理select-->
+      <Template :template.sync="item" @select.user="select"/>
+  </repeat>
+
+  <!--编辑栏-->
+  <view class="row-between edit-box">
+    <view class="select-box row" @tap.stop="">
+      <icon class="weui-icon-checkbox_{{!checked ? 'circle':'success'}}circle" type="{{!checked ? 'circle':'success'}}" size="23"></icon>
+      <text>全选</text>
+    </view>
+    <!--不要传递参数-->
+    <view class="zan-btn zan-btn--small delete-box" @tap.stop="deleted({{template}})">删除</view>
+  </view>
 </template>
 
 <script>
@@ -30,11 +41,23 @@
     }
     methods = {
       async deleted(template) {
-        await Tips.confirm('确定要删除该模板吗？');
-        template.create_time = null;
-        await open.deleteTemplate([template]);
-        await Tips.success('删除成功');
-        await this.doLoad();
+        // 获取到所有被选择的,filter过滤所有标志位为true的
+        // 如果什么都没选 提示用户选择，return
+        // 执行正常的流程
+//        await Tips.confirm('确定要删除该模板吗？');
+//        template.create_time = null;
+        // 传第一步获取到的已选择的数组
+//        await open.deleteTemplate([template]);
+//        await Tips.success('删除成功');
+//        await this.doLoad();
+      },
+      // 参数为模板ID
+      select(id) {
+        console.info(id)
+        console.info(this.templates[id])
+        // 5使用find方法找到templates对应的那个项目
+        // 6把标志位取反
+        // 7刷新视图
       }
     };
     components = {
@@ -51,4 +74,19 @@
 
 <style lang="scss">
   @import "../../styles/variable";
+  .edit-box{
+    position: fixed;
+    bottom: 0;
+    padding:20rpx 0;
+    background-color: white;
+    border-top: $border;
+    border-bottom: $border;
+    width: 100%;
+  }
+  .select-box{
+    margin-left: 20rpx;
+  }
+  .delete-box{
+    margin-right: 20rpx;
+  }
 </style>

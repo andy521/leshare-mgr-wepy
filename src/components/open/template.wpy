@@ -1,6 +1,9 @@
 <template>
-  <view class="template-box row-between">
-
+  <view class="template-box row">
+    <view class="label-box" @tap.stop="select({{template.template_id}})">
+      <!-- 2改成template的勾选标识符-->
+      <icon class="weui-icon-checkbox_{{!template.check ? 'circle':'success'}}circle" type="{{!template.check ? 'circle':'success'}}" size="23"></icon>
+    </view>
     <view class="column">
       <view class="row">
         <text class="lg">{{template.user_desc}} </text>
@@ -10,7 +13,7 @@
       <text class="xs muted">{{template.create_time}} - {{template.user_version}} </text>
     </view>
 
-    <view class="zan-btn zan-btn--small" @tap.stop="deleted({{template}})">删除</view>
+    <!--<view class="zan-btn zan-btn&#45;&#45;small" @tap.stop="deleted({{template}})">删除</view>-->
   </view>
 </template>
 
@@ -24,6 +27,10 @@
     methods = {
       async deleted(template) {
         this.$emit('deleted', template);
+      },
+      async select(id) {
+        // 3通知父页面，把template_id传递给父页面
+        this.$emit('select', id);
       }
     }
   }
@@ -31,6 +38,7 @@
 
 <style lang="scss">
   @import "../../styles/variable";
+  @import "../../styles/weui";
   .template-box{
     padding: 20rpx;
     background-color: white;
@@ -38,5 +46,7 @@
     border-top: $border;
     border-bottom: $border;
   }
-
+  .label-box{
+    margin-right: 20rpx;
+  }
 </style>

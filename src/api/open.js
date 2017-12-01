@@ -22,7 +22,9 @@ export default class open extends base {
     const templates = await this.get(url);
     templates.sort((a, b) => b.create_time - a.create_time);
     templates.forEach(template => {
+      // 1这里要加一个字段，表示是否被勾选，默认为false
       template.create_time = this.convertToTime(template.create_time);
+      template.check = false;
     });
     return templates;
   }

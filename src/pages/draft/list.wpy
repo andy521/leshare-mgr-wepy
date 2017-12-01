@@ -1,5 +1,6 @@
 <template>
   <repeat for="{{drafts}}" key="index" index="index" item="item">
+
     <Draft :draft.sync="item" @submit.user="submit"/>
   </repeat>
 </template>
