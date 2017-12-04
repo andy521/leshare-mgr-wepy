@@ -1,0 +1,35 @@
+<template>
+  <view class="row app-box">
+    <view class="label-box" @tap.stop="select({{app.id}})">
+      <!-- 改成template的勾选标识符-->
+      <icon class="weui-icon-checkbox_{{!app.check ? 'circle':'success'}}" type="{{!app.check ? 'circle':'success'}}" size="23"></icon>
+    </view>
+    <text class="ml20 lg">{{app.appName}}</text>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+
+  export default class App extends wepy.component {
+    props ={
+      app: {}
+    };
+    methods = {
+      async select(id) {
+        this.$emit('select', id);
+      }
+    }
+  }
+</script>
+
+<style lang="scss">
+  @import "../../styles/variable";
+  @import "../../styles/weui.scss";
+  .app-box{
+    padding: 20rpx;
+    background-color: white;
+    border-top: $border;
+    border-bottom: $border;
+  }
+</style>

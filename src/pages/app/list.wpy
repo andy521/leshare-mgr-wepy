@@ -1,0 +1,135 @@
+<template>
+  <view class="weui-cell weui-cell_select app-template-box">
+    <view class="weui-cell__hd weui-cell__hd_in-select-after">
+      <view class="weui-label">程序模板</view>
+    </view>
+    <view class="weui-cell__bd">
+      <picker bindchange="appTemplateChange" value="{{appTemplateIndex}}" range="{{appTemplates}}" range-key="{{'name'}}">
+        <view class="weui-select weui-select_in-select-after">{{appTemplates[appTemplateIndex].name}}</view>
+      </picker>
+    </view>
+  </view>
+
+
+  <repeat for="{{apps}}" key="index" index="index" item="item">
+    <App :app.sync="item" @select.user="select"/>
+  </repeat>
+  <view class="box"></view>
+  <view class="row-between edit-box">
+    <view class="select-box row" @tap.stop="checkAll">
+      <icon class="weui-icon-checkbox_{{!checked ? 'circle':'success'}}" type="{{!checked ? 'circle':'success'}}" size="23"></icon>
+      <text class="ml20">全选</text>
+    </view>
+    <!--不要传递参数-->
+    <view class="zan-btn zan-btn--small delete-box" @tap.stop="audit({{app}})">提交审核</view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import base from '../../mixins/base';
+  import open from '../../api/open';
+  import App from '../../components/open/app';
+  import Tips from '../../utils/Tips'
+
+  export default class AppList extends wepy.page {
+    data= {
+      apps: null,
+      appTemplates: [
+        {
+          id: 0,
+          key: 'Dining',
+          name: '乐享餐饮'
+        },
+        {
+          id: 1,
+          key: 'Shop',
+          name: '乐享商城'
+        },
+        {
+          id: 2,
+          key: 'SellerHelper',
+          name: '乐享商城助手'
+        }
+      ],
+      key: 'Dining',
+      appTemplateIndex: 0
+    };
+    async onLoad () {
+      await this.doLoad(this.key);
+    };
+    async doLoad(key) {
+      this.apps = await open.apps(key);
+      this.loaded();
+    }
+    methods = {
+      select(id) {
+        const app = this.apps.find(item => item.id == id);
+        app.check = !app.check;
+      },
+      checkAll() {
+        const checked = !this.checked;
+        this.apps.forEach(item => {
+          item.check = checked;
+        })
+      },
+      async appTemplateChange(e) {
+        this.key = this.appTemplates[e.detail.value].key;
+        this.appTemplateIndex = e.detail.value;
+        await this.doLoad(this.key);
+      },
+      async audit() {
+        const apps = this.apps.filter(item => item.check == true);
+        console.info(apps);
+        if (apps == null || apps.length < 1) {
+          Tips.alert('请选择')
+        } else {
+          this.$navigate('template')
+        }
+//        await Tips.confirm('确定要提交该审查列表吗？');
+//        await open.submitAudit(apps);
+//        await Tips.success('提交成功');
+//        this.loaded();
+      }
+    };
+    computed = {
+      checked() {
+        if (this.apps == null) return;
+        return this.apps.every(item => item.check);
+      }
+    };
+    mixins = [base];
+    components = {
+      App: App
+    };
+  }
+</script>
+
+<style lang="scss">
+  @import "../../styles/variable";
+  @import "../../styles/weui.scss";
+  .app-template-box{
+    background-color: #fff;
+    margin-bottom: 10rpx;
+    margin-right: -1px;
+  }
+  .box{
+    height: 100rpx;
+  }
+  .edit-box{
+    height: 50rpx;
+    position: fixed;
+    bottom: 0;
+    padding:20rpx 0;
+    background-color: white;
+    border-top: $border;
+    border-bottom: $border;
+    width: 100%;
+  }
+  .select-box{
+    margin-left: 20rpx;
+  }
+  .delete-box{
+    margin-right: 20rpx;
+  }
+</style>

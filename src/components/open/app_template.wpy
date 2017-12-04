@@ -1,0 +1,47 @@
+<template>
+
+  <label class="weui-cell weui-check__label row template-box ">
+    <radio class="weui-check" value="{{template.template_id}}" checked="{{template.check}}"/>
+    <view>
+      <view class="row">
+        <text class="lg">{{template.user_desc}} </text>
+        <text class="sm muted">#{{template.template_id}}</text>
+      </view>
+      <text class="xs muted">{{template.create_time}} - {{template.user_version}}</text>
+    </view>
+    <view class="weui-cell__ft weui-cell__ft_in-radio icon-box" wx:if="{{template.check}}">
+      <icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
+    </view>
+  </label>
+</template>
+
+<script>
+  import wepy from 'wepy';
+
+  export default class Template extends wepy.component {
+    props = {
+      template: {}
+    };
+    methods = {
+    }
+  }
+</script>
+
+<style lang="scss">
+  @import "../../styles/variable";
+  @import "../../styles/weui";
+  @import "../../styles/weui-extend";
+
+  .template-box{
+    background-color: white;
+    margin-bottom: 10rpx;
+    border-top: $border;
+    border-bottom: $border;
+    margin-left: -30rpx;
+    padding-left: 80rpx;
+  }
+  .icon-box{
+    position:absolute;
+    left: 650rpx;
+  }
+</style>

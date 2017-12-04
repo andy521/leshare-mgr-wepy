@@ -1,0 +1,62 @@
+<template>
+  <view class="row">
+    <radio-group class="radio-group-box" bindchange="radioChange">
+      <repeat for="{{templates}}" key="index" index="index" item="item">
+        <!--处理select-->
+        <AppTemplate :template.sync="item"/>
+      </repeat>
+    </radio-group>
+  </view>
+  <!--编辑栏-->
+  <ActionBar @tap.user="add" okText="确认" cancelText="返回"/>
+
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import base from '../../mixins/base';
+  import open from '../../api/open';
+  import AppTemplate from '../../components/open/app_template';
+//  import Event from '../../utils/Event';
+  import ActionBar from '../../components/common/action_bar';
+//  import Tips from '../../utils/Tips'
+
+  export default class TemplateList extends wepy.page {
+    data = {
+      templates: null
+    };
+    async onLoad () {
+      await this.doLoad();
+    };
+    async doLoad() {
+      this.templates = await open.templates();
+      this.loaded();
+    }
+    async onPullDownRefresh () {
+      await this.doLoad();
+      wepy.stopPullDownRefresh();
+    }
+    methods = {
+      radioChange (e) {
+        this.templates.forEach(item => {
+          item.check = item.template_id == e.detail.value;
+        });
+      }
+    };
+    components = {
+      AppTemplate: AppTemplate,
+      ActionBar: ActionBar
+    };
+    mixins = [base];
+    config = {
+      navigationBarTitleText: '小程序模板列表',
+      enablePullDownRefresh: true
+    };
+  }
+</script>
+
+<style lang="scss">
+  .radio-group-box{
+    width: 100%;
+  }
+</style>

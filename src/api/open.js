@@ -22,11 +22,22 @@ export default class open extends base {
     const templates = await this.get(url);
     templates.sort((a, b) => b.create_time - a.create_time);
     templates.forEach(template => {
-      // 1这里要加一个字段，表示是否被勾选，默认为false
+      // 这里要加一个字段，表示是否被勾选，默认为false
       template.create_time = this.convertToTime(template.create_time);
       template.check = false;
     });
     return templates;
+  }
+  /**
+   * 查询小程序列表
+   */
+  static async apps(key) {
+    const url = `${this.baseUrl}/code/app_list?app_template=${key}`;
+    const apps = await this.get(url);
+    apps.forEach(app => {
+      app.check = false;
+    });
+    return apps;
   }
 
   // 处理时间
@@ -41,8 +52,18 @@ export default class open extends base {
     const url = `${this.baseUrl}/code/template`;
     return this.post(url, draft);
   }
+  /***
+   * 删除模板
+   * */
   static deleteTemplate(template) {
     const url = `${this.baseUrl}/code/template`;
     return this.delete(url, template);
+  }
+  /**
+   * 提交审核
+   */
+  static submitAudit(apps) {
+    const url = `${this.baseUrl}/code/submit_audit`;
+    return this.post(url, apps);
   }
 }

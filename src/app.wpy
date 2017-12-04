@@ -25,7 +25,9 @@
     config = {
       pages: [
         'pages/draft/list',
-        'pages/template/list'
+        'pages/template/list',
+        'pages/app/list',
+        'pages/app/template'
       ],
       window: {
         backgroundTextStyle: 'dark',
@@ -53,7 +55,7 @@
           {
             iconPath: 'images/tab/user.png',
             selectedIconPath: 'images/tab/user-active.png',
-            pagePath: 'pages/draft/list',
+            pagePath: 'pages/app/list',
             text: '小程序'
           }
         ]
