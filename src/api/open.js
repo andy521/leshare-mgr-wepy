@@ -63,6 +63,7 @@ export default class open extends base {
    * 提交审核
    */
   static submitAudit(apps) {
+    apps.codeTemplateInfo.create_time = null;
     const url = `${this.baseUrl}/code/submit_audit`;
     return this.post(url, apps);
   }

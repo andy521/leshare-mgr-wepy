@@ -33,7 +33,6 @@
 
 <style lang="scss">
   @import "../../styles/variable";
-  @import "../../styles/weui";
   .template-box{
     padding: 20rpx;
     background-color: white;

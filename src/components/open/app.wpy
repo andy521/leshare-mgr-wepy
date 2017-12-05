@@ -25,7 +25,6 @@
 
 <style lang="scss">
   @import "../../styles/variable";
-  @import "../../styles/weui.scss";
   .app-box{
     padding: 20rpx;
     background-color: white;

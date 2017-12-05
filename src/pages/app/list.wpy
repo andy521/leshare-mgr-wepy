@@ -21,7 +21,7 @@
       <text class="ml20">全选</text>
     </view>
     <!--不要传递参数-->
-    <view class="zan-btn zan-btn--small delete-box" @tap.stop="audit({{app}})">提交审核</view>
+    <view class="zan-btn zan-btn--small zan-btn--primary delete-box" @tap.stop="audit({{app}})">提交审核</view>
   </view>
 </template>
 
@@ -80,16 +80,11 @@
       },
       async audit() {
         const apps = this.apps.filter(item => item.check == true);
-        console.info(apps);
         if (apps == null || apps.length < 1) {
           Tips.alert('请选择')
         } else {
-          this.$navigate('template')
+          this.$navigate('template?apps=' + JSON.stringify(apps))
         }
-//        await Tips.confirm('确定要提交该审查列表吗？');
-//        await open.submitAudit(apps);
-//        await Tips.success('提交成功');
-//        this.loaded();
       }
     };
     computed = {

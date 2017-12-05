@@ -19,13 +19,18 @@
   import AppTemplate from '../../components/open/app_template';
 //  import Event from '../../utils/Event';
   import ActionBar from '../../components/common/action_bar';
-//  import Tips from '../../utils/Tips'
+  import Tips from '../../utils/Tips'
 
   export default class TemplateList extends wepy.page {
     data = {
-      templates: null
+      templates: null,
+      template: {
+        apps: null,
+        codeTemplateInfo: null
+      },
     };
-    async onLoad () {
+    async onLoad (options) {
+      this.template.apps = JSON.parse(options.apps);
       await this.doLoad();
     };
     async doLoad() {
@@ -41,6 +46,19 @@
         this.templates.forEach(item => {
           item.check = item.template_id == e.detail.value;
         });
+        this.template.codeTemplateInfo = this.templates.find(item => item.template_id == e.detail.value)
+      },
+      async add () {
+        this.template.apps = this.template.apps.map(item => {
+          const result = {...item};
+          result.createTime = null;
+          result.updateTime = null;
+          return result;
+        });
+        await Tips.confirm('确定要提交该审查列表吗？');
+        await open.submitAudit(this.template);
+        await Tips.success('提交成功');
+        this.doLoad();
       }
     };
     components = {
