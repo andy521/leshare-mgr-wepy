@@ -30,7 +30,7 @@
     }
     methods = {
       async submit(draft) {
-        await Tips.confirm('确定要提交该草稿吗？');
+        await Tips.confirm('确定要提交该草稿？');
         draft.create_time = null;
         await open.submitDraft(draft);
         await Tips.success('提交成功');

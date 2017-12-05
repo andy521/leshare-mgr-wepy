@@ -1,0 +1,39 @@
+<template>
+  <view class="row-between status-box">
+    <view class="column">
+      <text class="lg">{{status.appName}}</text>
+      <text class="xs muted">{{status.errmsg}}</text>
+    </view>
+    <view>
+      <view class="icon-box">
+        <icon type="success" size="25" wx:if="{{status.status < 1}}"></icon>
+        <icon type="waiting" size="25" wx:elif="{{status.status > 1}}"></icon>
+        <icon type="warn" size="25" wx:else></icon>
+
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+
+  export default class Template extends wepy.component {
+    onLoad() {
+    }
+    props = {
+      status: {}
+    };
+  }
+</script>
+
+<style lang="scss">
+  @import "../../styles/variable";
+
+  .status-box{
+    padding: 20rpx 40rpx;
+    background-color: white;
+    border-top: $border;
+    border-bottom: $border;
+  }
+</style>

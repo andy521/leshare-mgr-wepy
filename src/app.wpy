@@ -27,7 +27,8 @@
         'pages/draft/list',
         'pages/template/list',
         'pages/app/list',
-        'pages/app/template'
+        'pages/app/template',
+        'pages/app/status'
       ],
       window: {
         backgroundTextStyle: 'dark',

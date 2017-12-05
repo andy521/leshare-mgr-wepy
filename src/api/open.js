@@ -67,4 +67,28 @@ export default class open extends base {
     const url = `${this.baseUrl}/code/submit_audit`;
     return this.post(url, apps);
   }
+
+  /****
+   * 提交体验版
+   */
+  static submitDemo(apps) {
+    apps.codeTemplateInfo.create_time = null;
+    const url = `${this.baseUrl}/code/submit_demo`;
+    return this.post(url, apps);
+  }
+  /****
+   * 查询审核结果
+   */
+  static statusAudit(apps) {
+    const url = `${this.baseUrl}/code/audit/status`;
+    return this.post(url, apps);
+  }
+
+  /***
+   * 版本发布
+   */
+  static publish(apps) {
+    const url = `${this.baseUrl}/code/publish`;
+    return this.post(url, apps)
+  }
 }

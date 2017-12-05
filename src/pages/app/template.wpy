@@ -17,7 +17,7 @@
   import base from '../../mixins/base';
   import open from '../../api/open';
   import AppTemplate from '../../components/open/app_template';
-//  import Event from '../../utils/Event';
+  import Event from '../../utils/Event';
   import ActionBar from '../../components/common/action_bar';
   import Tips from '../../utils/Tips'
 
@@ -28,9 +28,11 @@
         apps: null,
         codeTemplateInfo: null
       },
+      mode: 'audit'
     };
-    async onLoad (options) {
-      this.template.apps = JSON.parse(options.apps);
+    async onLoad ({template, mode}) {
+      this.mode = mode;
+      this.template.apps = JSON.parse(template);
       await this.doLoad();
     };
     async doLoad() {
@@ -55,10 +57,17 @@
           result.updateTime = null;
           return result;
         });
-        await Tips.confirm('确定要提交该审查列表吗？');
-        await open.submitAudit(this.template);
-        await Tips.success('提交成功');
-        this.doLoad();
+        if (this.mode === 'audit') {
+          await Tips.confirm('确定要提交该审查列表？');
+          await open.submitAudit(this.template);
+          await Tips.success('提交成功');
+        } else {
+          await Tips.confirm('确定要提交该体验版？');
+          await open.submitDemo(this.template);
+          await Tips.success('提交成功');
+        }
+        wepy.navigateBack();
+        Event.emit('APP_LIST_UPDATE')
       }
     };
     components = {

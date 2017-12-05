@@ -1,0 +1,60 @@
+<template>
+  <repeat for="{{results}}">
+    <AppStatus :status.sync="item"/>
+  </repeat>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import base from '../../mixins/base';
+//  import open from '../../api/open';
+  import AppStatus from '../../components/open/app_status';
+  //  import Event from '../../utils/Event';
+//  import Tips from '../../utils/Tips'
+
+  export default class TemplateList extends wepy.page {
+    data = {
+      results: []
+    };
+    async onLoad (options, {preload}) {
+      const param = preload.param;
+      this.results = param.map(item => {
+        return {
+          appName: item.leApp.appName,
+          status: item.codeAuditResult.status,
+          errcode: item.codeAuditResult.errcode,
+          errmsg: item.codeAuditResult.errmsg
+        };
+      });
+      this.results.forEach(item => {
+        if (item.errmsg === 'ok') {
+          item.errmsg = '';
+        }
+      })
+    };
+    async doLoad() {
+    }
+    async onPullDownRefresh () {
+      await this.doLoad();
+      wepy.stopPullDownRefresh();
+    }
+    methods = {
+      back() {
+        this.$switch('list')
+      }
+    };
+    components = {
+      AppStatus: AppStatus
+    };
+    mixins = [base];
+    config = {
+      navigationBarTitleText: '小程序审核结果',
+      enablePullDownRefresh: true
+    };
+  }
+</script>
+
+<style lang="scss">
+  @import "../../styles/variable";
+
+</style>
