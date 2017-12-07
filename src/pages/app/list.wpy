@@ -26,7 +26,6 @@
       <view class="zan-btn zan-btn--small delete-box" @tap.stop="publish">发布</view>
       <view class="zan-btn zan-btn--small delete-box" @tap.stop="submitDemo">体验</view>
       <view class="zan-btn zan-btn--small delete-box" @tap.stop="audit({{app}})">审核</view>
-
     </view>
   </view>
 </template>
