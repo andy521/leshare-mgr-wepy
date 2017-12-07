@@ -36,6 +36,21 @@ export default class open extends base {
     const apps = await this.get(url);
     apps.forEach(app => {
       app.check = false;
+      if (app.auditVersion == null) {
+        app.auditVersion_text = '未知';
+      } else {
+        app.auditVersion_text = app.auditVersion;
+      }
+      if (app.demoVersion == null) {
+        app.demoVersion_text = '未知';
+      } else {
+        app.demoVersion_text = app.demoVersion;
+      }
+      if (app.prodVersion == null) {
+        app.prodVersion_text = '未知';
+      } else {
+        app.prodVersion_text = app.prodVersion;
+      }
     });
     return apps;
   }

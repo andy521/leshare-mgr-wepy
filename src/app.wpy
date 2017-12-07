@@ -42,20 +42,20 @@
         backgroundColor: '#FAFAFA',
         list: [
           {
-            iconPath: 'images/tab/manage.png',
-            selectedIconPath: 'images/tab/manage-active.png',
+            iconPath: 'images/tab/draft.png',
+            selectedIconPath: 'images/tab/draft-active.png',
             pagePath: 'pages/draft/list',
             text: '草稿箱'
           },
           {
-            iconPath: 'images/tab/order.png',
-            selectedIconPath: 'images/tab/order-active.png',
+            iconPath: 'images/tab/template.png',
+            selectedIconPath: 'images/tab/template-active.png',
             pagePath: 'pages/template/list',
             text: '代码模板'
           },
           {
-            iconPath: 'images/tab/user.png',
-            selectedIconPath: 'images/tab/user-active.png',
+            iconPath: 'images/tab/app.png',
+            selectedIconPath: 'images/tab/app-active.png',
             pagePath: 'pages/app/list',
             text: '小程序'
           }

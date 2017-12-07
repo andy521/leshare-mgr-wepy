@@ -4,7 +4,9 @@
     <Draft :draft.sync="item" @submit.user="submit"/>
 
   </repeat>
-  <!--TODO 占位符-->
+
+  <!--占位符-->
+  <Placeholder :show.sync="empty" />
 </template>
 
 <script>
@@ -12,19 +14,29 @@
   import open from '../../api/open';
   import base from '../../mixins/base';
   import Draft from '../../components/open/draft';
-  import Event from '../../utils/Event'
-  import Tips from '../../utils/Tips'
+  import Event from '../../utils/Event';
+  import Tips from '../../utils/Tips';
+  import Placeholder from '../../components/common/placeholder'
 
   export default class DraftList extends wepy.page {
     data = {
-      drafts: null
+      drafts: null,
+      empty: true
     };
     async onLoad () {
       await this.doLoad();
     };
     async doLoad () {
-      this.drafts = await open.drafts();
-      this.loaded();
+      try {
+        this.drafts = await open.drafts();
+        this.empty = this.drafts.length < 1;
+      } catch (e) {
+        this.drafts = [];
+        this.empty = true;
+        console.error(e);
+      } finally {
+        this.loaded();
+      }
     }
     async onPullDownRefresh () {
       await this.doLoad();
@@ -39,7 +51,8 @@
       }
     };
     components = {
-      Draft: Draft
+      Draft: Draft,
+      Placeholder: Placeholder
     };
     computed = {};
     mixins = [base];
