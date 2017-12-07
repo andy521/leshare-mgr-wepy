@@ -7,7 +7,7 @@
         <text class="sm muted ml20">#{{draft.draft_id}}</text>
       </view>
 
-      <text class="xs muted">{{draft.create_time}} - {{draft.user_version}} </text>
+      <text class="xs muted">{{draft.create_time_text}} - {{draft.user_version}} </text>
     </view>
 
     <view class="zan-btn zan-btn--small zan-btn--primary" @tap.stop="submit({{draft}})">提交</view>

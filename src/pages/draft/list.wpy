@@ -2,7 +2,9 @@
   <repeat for="{{drafts}}" key="index" index="index" item="item">
 
     <Draft :draft.sync="item" @submit.user="submit"/>
+
   </repeat>
+  <!--TODO 占位符-->
 </template>
 
 <script>
@@ -31,7 +33,6 @@
     methods = {
       async submit(draft) {
         await Tips.confirm('确定要提交该草稿？');
-        draft.create_time = null;
         await open.submitDraft(draft);
         await Tips.success('提交成功');
         Event.emit(Event.TEMPLATE_LIST_UPDATE);

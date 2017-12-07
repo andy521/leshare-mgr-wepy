@@ -4,6 +4,8 @@
       <Template :template.sync="item" @select.user="select"/>
   </repeat>
 
+  <Placeholder :show.sync="empty" />
+  <!--占位符-->
   <view class="box"></view>
   <!--编辑栏-->
   <view class="row-between edit-box">
@@ -12,7 +14,7 @@
       <text class="ml20">全选</text>
     </view>
     <!--不要传递参数-->
-    <view class="zan-btn zan-btn--small delete-box" @tap.stop="deleted({{template}})">删除</view>
+    <view class="zan-btn zan-btn--small delete-box" @tap.stop="remove({{template}})">删除</view>
   </view>
 </template>
 
@@ -22,19 +24,29 @@
   import open from '../../api/open';
   import Template from '../../components/open/template';
   import Event from '../../utils/Event';
-  import Tips from '../../utils/Tips'
+  import Tips from '../../utils/Tips';
+  import Placeholder from '../../components/common/placeholder';
 
   export default class TemplateList extends wepy.page {
     data = {
-      templates: null
+      templates: null,
+      empty: true
     };
     async onLoad () {
       await this.doLoad();
       Event.listen(Event.TEMPLATE_LIST_UPDATE, this.doLoad.bind(this), this);
     };
     async doLoad() {
-      this.templates = await open.templates();
-      this.loaded();
+      try {
+        this.templates = await open.templates();
+        this.empty = this.templates.length < 1;
+      } catch (e) {
+        this.templates = [];
+        this.empty = true;
+        console.error(e);
+      } finally {
+        this.loaded();
+      }
     }
     async onPullDownRefresh () {
       await this.doLoad();
@@ -43,18 +55,15 @@
     methods = {
       // 获取到所有被选择的,filter过滤所有标志位为true的
       // 如果什么都没选 提示用户选择，return
-      async deleted() {
-        const templates = this.templates.filter(item => item.check == true).map(item => {
-          const result = {...item};
-          result.create_time = null;
-          return result;
-        });
+      async remove() {
+        const templates = this.templates.filter(item => item.check == true);
         if (templates == null || templates.length < 1) {
-          Tips.alert('请选择')
+          Tips.alert('请选择');
+          return;
         }
-//         执行正常的流程
+        // 执行正常的流程
         await Tips.confirm('确定要删除该模板吗？');
-//         传第一步获取到的已选择的数组
+        // 传第一步获取到的已选择的数组
         await open.deleteTemplate(templates);
         await Tips.success('删除成功');
         await this.doLoad();
@@ -80,7 +89,8 @@
       }
     };
     components = {
-      Template: Template
+      Template: Template,
+      Placeholder: Placeholder
     };
     mixins = [base];
     config = {
