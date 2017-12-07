@@ -22,10 +22,11 @@
     </view>
     <!--不要传递参数-->
     <view>
-      <view class="zan-btn zan-btn--small delete-box" @tap.stop="status">查询</view>
-      <view class="zan-btn zan-btn--small delete-box" @tap.stop="publish">发布</view>
-      <view class="zan-btn zan-btn--small delete-box" @tap.stop="submitDemo">体验</view>
-      <view class="zan-btn zan-btn--small delete-box" @tap.stop="audit({{app}})">审核</view>
+      <view class="zan-btn zan-btn--small delete-box" @tap="status">查询</view>
+      <view class="zan-btn zan-btn--small delete-box" @tap="publish">发布</view>
+      <view class="zan-btn zan-btn--small delete-box" @tap="submitDemo">体验</view>
+      <view class="zan-btn zan-btn--small delete-box" @tap="audit({{app}})">审核</view>
+
     </view>
   </view>
 </template>
@@ -90,35 +91,23 @@
         await this.doLoad(this.key);
       },
       async audit() {
-        const apps = this.apps.filter(item => item.check == true);
-        if (apps == null || apps.length < 1) {
-          Tips.alert('请选择');
-        } else {
-          const param = {
-            mode: 'audit',
-            template: JSON.stringify(apps)
-          };
-          this.$navigate('template', param);
-        }
+        const apps = this.getCheckedApps();
+        const param = {
+          mode: 'audit',
+          template: JSON.stringify(apps)
+        };
+        this.$navigate('template', param);
       },
       submitDemo() {
-        const apps = this.apps.filter(item => item.check == true);
-        if (apps == null || apps.length < 1) {
-          Tips.alert('请选择');
-        } else {
-          const param = {
-            mode: 'demo',
-            template: JSON.stringify(apps)
-          };
-          this.$navigate('template', param);
-        }
+        const apps = this.getCheckedApps();
+        const param = {
+          mode: 'demo',
+          template: JSON.stringify(apps)
+        };
+        this.$navigate('template', param);
       },
       async status() {
-        const apps = this.apps.filter(item => item.check == true);
-        if (apps == null || apps.length < 1) {
-          Tips.alert('请选择');
-          return;
-        }
+        const apps = this.getCheckedApps();
         await Tips.confirm('确定要查询该审查列表？');
         const results = await open.statusAudit(apps);
         await Tips.success('查询成功');
@@ -127,17 +116,22 @@
         this.$navigate('status');
       },
       async publish() {
-        const apps = this.apps.filter(item => item.check == true);
-        if (apps == null || apps.length < 1) {
-          Tips.alert('请选择');
-          return;
-        }
+        const apps = this.getCheckedApps();
         await Tips.confirm('确定要发布该版本？');
         await open.publish(apps);
         await Tips.success('发布成功');
         this.loaded();
       }
     };
+    getCheckedApps() {
+      const apps = this.apps.filter(item => item.check == true);
+      if (apps == null || apps.length < 1) {
+        Tips.alert('请选择');
+        throw new Error('尚未选择任何小程序');
+      } else {
+        return apps;
+      }
+    }
     computed = {
       checked() {
         if (this.apps == null) return;

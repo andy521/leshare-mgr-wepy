@@ -10,7 +10,7 @@
         <text class="sm muted ml20">#{{template.template_id}}</text>
       </view>
 
-      <text class="xs muted">{{template.create_time}} - {{template.user_version}} </text>
+      <text class="xs muted">{{template.create_time_text}} - {{template.user_version}} </text>
     </view>
   </view>
 </template>

@@ -10,7 +10,7 @@ export default class open extends base {
     const drafts = await this.get(url);
     drafts.sort((a, b) => b.create_time - a.create_time);
     drafts.forEach(draft => {
-      draft.create_time = this.convertToTime(draft.create_time);
+      draft.create_time_text = this.convertToTime(draft.create_time);
     });
     return drafts;
   }
@@ -23,7 +23,7 @@ export default class open extends base {
     templates.sort((a, b) => b.create_time - a.create_time);
     templates.forEach(template => {
       // 这里要加一个字段，表示是否被勾选，默认为false
-      template.create_time = this.convertToTime(template.create_time);
+      template.create_time_text = this.convertToTime(template.create_time);
       template.check = false;
     });
     return templates;
@@ -63,7 +63,6 @@ export default class open extends base {
    * 提交审核
    */
   static submitAudit(apps) {
-    apps.codeTemplateInfo.create_time = null;
     const url = `${this.baseUrl}/code/submit_audit`;
     return this.post(url, apps);
   }
@@ -72,7 +71,6 @@ export default class open extends base {
    * 提交体验版
    */
   static submitDemo(apps) {
-    apps.codeTemplateInfo.create_time = null;
     const url = `${this.baseUrl}/code/submit_demo`;
     return this.post(url, apps);
   }
