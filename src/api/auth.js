@@ -14,7 +14,7 @@ export default class auth extends base {
    */
   static async login(phone, code) {
     const appCode = wepy.$instance.globalData.app_code;
-    const url = `${this.baseUrl}/auth/login?phone=${phone}&sms_code=${code}&app_code=${appCode}`;
+    const url = `${this.sellerUrl}/auth/login?phone=${phone}&sms_code=${code}&app_code=${appCode}`;
     const dara = await this.get(url);
     return dara.login_code;
   }
@@ -22,7 +22,7 @@ export default class auth extends base {
    * 短信验证码
    */
   static async sms (phone) {
-    const url = `${this.baseUrl}/auth/sms_code?phone=${phone}`;
+    const url = `${this.sellerUrl}/auth/sms_code?phone=${phone}`;
     const data = await this.get(url);
     return data.message;
   }
@@ -31,7 +31,7 @@ export default class auth extends base {
    * 检查登录情况
    */
   static async check(loginCode) {
-    const url = `${this.baseUrl}/auth/check?login_code=${loginCode}`;
+    const url = `${this.sellerUrl}/auth/check?login_code=${loginCode}`;
     const data = await this.get(url)
     return data.result;
   }
