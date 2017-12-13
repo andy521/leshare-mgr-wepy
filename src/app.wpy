@@ -34,6 +34,7 @@
         'pages/system/open_user_list',
         'pages/system/system_user_detail',
         'pages/system/open_user_business',
+        'pages/system/open_user_miniprogram',
         'pages/system/open_user_func'
       ],
       window: {

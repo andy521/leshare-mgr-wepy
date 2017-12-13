@@ -5,8 +5,12 @@
       <view class="column">
         <text class="lg">{{system.nick_name}}</text>
         <view class="row">
-          <text class="muted xs mr20">授权状态：{{system.is_use_text}}</text>
-          <text class="muted xs mr20">认证状态：{{system.verify_type_info_text}}</text>
+          <text class="muted xs mr20">授权状态：</text>
+          <text class="muted xs mr20 {{system.is_use == '0'? 'danger':'green'}}">{{system.is_use_text}}</text>
+          <text class="muted xs mr20">认证状态：</text>
+          <text class="muted xs mr20 green" wx:if="{{system.verify_type_info == '0'}}">{{system.verify_type_info_text}}</text>
+          <text class="muted xs mr20 danger" wx:elif="{{system.verify_type_info == '1'}}">{{system.verify_type_info_text}}</text>
+          <text class="muted xs mr20" wx:else>{{system.verify_type_info_text}}</text>
         </view>
       </view>
     </view>
@@ -26,9 +30,9 @@
       system: {}
     };
     methods = {
-      async check(id) {
-        this.$emit('check', id)
-     }
+      async check (id) {
+        this.$emit('check', id);
+      }
     }
   }
 </script>
@@ -60,5 +64,8 @@
   }
   .line{
     border-top:1px solid #e5e5e5;
+  }
+  text.green{
+    color:green;
   }
 </style>

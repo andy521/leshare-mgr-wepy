@@ -23,7 +23,7 @@
       </view>
       <view class="weui-cell">
         <view class="weui-cell__bd">认证状态</view>
-        <view class="weui-cell__ft">{{systemDetail.verify_type_info_text}}</view>
+        <view class="weui-cell__ft ">{{systemDetail.verify_type_info_text}}</view>
       </view>
       <view class="weui-cell">
         <view class="weui-cell__bd">原始ID</view>
@@ -31,7 +31,7 @@
       </view>
       <view class="weui-cell">
         <view class="weui-cell__bd">账号介绍</view>
-        <view class="weui-cell__ft">{{systemDetail.signature}}</view>
+        <view class="weui-cell__ft length">{{systemDetail.signature}}</view>
       </view>
       <view class="weui-cell">
         <view class="weui-cell__bd">主体名称</view>
@@ -65,9 +65,9 @@
         <view class="weui-cell__bd">创建时间</view>
         <view class="weui-cell__ft">{{systemDetail.create_time}}</view>
       </view>
-      <view class="weui-cell">
+      <view class="weui-cell weui-cell_access" @tap="miniprogram">
         <view class="weui-cell__bd">小程序配置</view>
-        <view class="weui-cell__ft">{{systemDetail.miniprogram_info}}</view>
+        <view class="weui-cell__ft weui-cell__ft_in-access length">{{systemDetail.miniprogram_info}}</view>
       </view>
     </view>
   </view>
@@ -109,6 +109,11 @@
         const func = this.systemDetail.func_info_text;
         this.$preload('param', func);
         this.$navigate('open_user_func');
+      },
+      miniprogram() {
+        const miniprogram = this.systemDetail.miniprogram_info;
+        this.$preload('param', miniprogram);
+        this.$navigate('open_user_miniprogram');
       }
     };
     config = {};
@@ -125,5 +130,11 @@
       width: 100%;
       height: 100%;
     }
+  }
+  .length{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 500rpx;
   }
 </style>

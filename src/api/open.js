@@ -70,7 +70,10 @@ export default class open extends base {
       system.business_info_text = this._processBusiness(system.business_info);
       system.func_info_text = this._processFunc(system.func_info);
       if (system.head_img === null) {
-        system.head_img = '/images/icons/head_img.png'
+        system.head_img = '/images/icons/img.png'
+      }
+      if (system.nick_name === '') {
+        system.nick_name = '未知'
       }
     });
     return systems;

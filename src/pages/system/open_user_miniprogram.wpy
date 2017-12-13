@@ -1,0 +1,39 @@
+<template>
+  <view class="weui-cells weui-cells_after-title">
+    <view class="weui-cell">
+      <text class="weui-cell__bd lg mini_width">{{miniprogram}}</text>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import base from '../../mixins/base';
+
+  export default class Miniprogram extends wepy.page {
+    data = {
+      miniprogram: null
+    };
+    onLoad (options, {preload}) {
+      this.miniprogram = preload.param
+    };
+    methods = {
+    };
+    components = {
+    };
+    computed = {};
+    mixins = [base];
+    config = {
+      navigationBarTitleText: '小程序配置'
+    };
+  }
+</script>
+
+<style lang="scss">
+  @import "../../styles/variable";
+
+  .mini_width{
+    width: 80%;
+    word-wrap:break-word;
+  }
+</style>
