@@ -1,9 +1,9 @@
 <template>
-  <repeat for="{{drafts}}" key="index" index="index" item="item">
+  <!--<repeat for="{{drafts}}" key="index" index="index" item="item">-->
 
-    <Draft :draft.sync="item" @submit.user="submit"/>
+    <!--<Draft :draft.sync="item" @submit.user="submit"/>-->
 
-  </repeat>
+  <!--</repeat>-->
 
   <!--占位符-->
   <Placeholder :show.sync="empty" />

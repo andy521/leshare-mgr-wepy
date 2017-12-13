@@ -3,6 +3,7 @@ import http from '../utils/Http'
 
 export default class base {
   static baseUrl = wepy.$instance.globalData.baseUrl;
+  static newBaseUrl = wepy.$instance.globalData.newBaseUrl;
   static get = http.get.bind(http);
   static put = http.put.bind(http);
   static post = http.post.bind(http);

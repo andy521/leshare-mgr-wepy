@@ -1,0 +1,64 @@
+<template>
+  <view class="column open-box">
+    <view class="row text-box">
+      <view class="portrait"><image src="{{system.head_img}}" /></view>
+      <view class="column">
+        <text class="lg">{{system.nick_name}}</text>
+        <view class="row">
+          <text class="muted xs mr20">授权状态：{{system.is_use_text}}</text>
+          <text class="muted xs mr20">认证状态：{{system.verify_type_info_text}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="line"></view>
+    <view class="row-end zan-box">
+      <view class="zan-btn zan-btn--small ml20" @tap="check({{system.id}})">查看详情</view>
+      <view class="zan-btn zan-btn--small zan-btn--primary ml20">创建应用</view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+
+  export default class DraftItem extends wepy.component {
+    props = {
+      system: {}
+    };
+    methods = {
+      async check(id) {
+        this.$emit('check', id)
+     }
+    }
+  }
+</script>
+
+<style lang="scss">
+  @import "../../styles/variable";
+
+  .open-box{
+    background-color: #fff;
+    border-top: $border;
+    border-bottom: $border;
+    margin-bottom: 10rpx;
+    width: 100%;
+  }
+  .text-box{
+    padding:20rpx 0;
+  }
+  .zan-box{
+    padding:10rpx 0;
+  }
+  .portrait{
+    margin: 0 40rpx;
+    width: 75rpx;
+    height: 75rpx;
+    image{
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .line{
+    border-top:1px solid #e5e5e5;
+  }
+</style>

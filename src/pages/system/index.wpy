@@ -1,0 +1,43 @@
+<template>
+  <view class="weui-cells weui-cells_after-title">
+    <navigator url="open_user_list" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+      <view class="weui-cell__bd">开放平台</view>
+      <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+    </navigator>
+    <navigator url="" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+      <view class="weui-cell__bd">应用管理</view>
+      <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+    </navigator>
+    <navigator url="" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+      <view class="weui-cell__bd">店铺管理</view>
+      <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+    </navigator>
+    <navigator url="" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+      <view class="weui-cell__bd">用户管理</view>
+      <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+    </navigator>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import base from '../../mixins/base';
+
+  export default class DraftList extends wepy.page {
+    data = {
+    };
+    onLoad () {
+    };
+    methods = {
+    };
+    components = {
+    };
+    computed = {};
+    mixins = [base];
+    config = {
+      navigationBarTitleText: '系统管理'
+    };
+  }
+</script>
+
+<style></style>

@@ -1,0 +1,37 @@
+<template>
+  <view class="weui-cells weui-cells_after-title">
+    <view class="weui-cell" wx:for="{{func}}" wx:key="*this">
+      <text class="weui-cell__bd lg">{{item}}</text>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import base from '../../mixins/base';
+
+  export default class Func extends wepy.page {
+    data = {
+      func: null
+    };
+    onLoad (options, {preload}) {
+      this.func = preload.param.filter(item => {
+        return item != null
+      });
+    };
+    methods = {
+    };
+    components = {
+    };
+    computed = {};
+    mixins = [base];
+    config = {
+      navigationBarTitleText: '授权信息'
+    };
+  }
+</script>
+
+<style lang="scss">
+  @import "../../styles/variable";
+
+</style>

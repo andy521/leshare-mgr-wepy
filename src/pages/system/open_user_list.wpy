@@ -1,0 +1,117 @@
+<template>
+  <view class="weui-cells weui-cells_after-title">
+    <view class="weui-cell weui-cell_select type-box">
+      <view class="weui-cell__hd weui-cell__hd_in-select-after">
+        <view class="weui-label">授权类型</view>
+      </view>
+      <view class="weui-cell__bd">
+        <picker bindchange="typeChange" value="{{typeIndex}}" range="{{type}}" range-key="{{'name'}}">
+          <view class="weui-select weui-select_in-select-after">{{type[typeIndex].name}}</view>
+        </picker>
+      </view>
+    </view>
+  </view>
+
+
+
+  <view class="box"></view>
+
+  <repeat for="{{systems}}" key="index" index="index" item="item">
+
+    <OpenUser :system.sync="item" @check.user="check"/>
+
+  </repeat>
+
+  <!--占位符-->
+  <Placeholder :show.sync="empty" />
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import open from '../../api/open';
+  import base from '../../mixins/base';
+  import pagination from '../../mixins/pagination';
+  import OpenUser from '../../components/open/open_user';
+  import Event from '../../utils/Event';
+  import Tips from '../../utils/Tips';
+  import Placeholder from '../../components/common/placeholder'
+
+  export default class UserList extends wepy.page {
+    data = {
+      systems: null,
+      type: [
+        {
+          id: 0,
+          key: '0',
+          name: '公众号'
+        },
+        {
+          id: 1,
+          key: '1',
+          name: '小程序'
+        }
+      ],
+      key: '0',
+      typeIndex: 0,
+      actionSheetHidden: true
+    };
+    async onLoad () {
+      console.info(await this.doLoad());
+    };
+    async doLoad () {
+      try {
+        this.systems = await open.manageSystem(this.key);
+        this.empty = this.systems.length < 1;
+      } catch (e) {
+        this.systems = [];
+        this.empty = true;
+        console.error(e);
+      } finally {
+        this.next();
+        this.loaded();
+      }
+    }
+    async onPullDownRefresh () {
+      await this.doLoad();
+      wepy.stopPullDownRefresh();
+    }
+    methods = {
+      check(id) {
+        const system = this.systems.find(item => item.id == id);
+        this.$preload('param', system);
+        this.$navigate('system_user_detail');
+      },
+      async typeChange(e) {
+        this.key = this.type[e.detail.value].key;
+        this.typeIndex = e.detail.value;
+        await this.doLoad(this.key);
+      },
+    };
+    components = {
+      OpenUser: OpenUser,
+      Placeholder: Placeholder
+    };
+    computed = {};
+    mixins = [base, pagination];
+    config = {
+      navigationBarTitleText: '开放平台',
+      enablePullDownRefresh: true
+    };
+  }
+</script>
+
+<style lang="scss">
+  @import "../../styles/variable";
+
+  .type-box{
+    background-color: #fff;
+    margin-right: -1px;
+    position: fixed;
+    top: 0;
+    width: 101%;
+    height:85rpx;
+  }
+  .box{
+    height: 100rpx;
+  }
+</style>

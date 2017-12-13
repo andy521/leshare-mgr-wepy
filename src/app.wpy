@@ -20,7 +20,8 @@
     globalData = {
       auth: {},
       app_code: '8ZXSbN4YbolpqKk93VYPc5iUaSRk1ied',
-      baseUrl: 'https://wx.leshare.shop/open'
+      baseUrl: 'https://wx.leshare.shop/open',
+      newBaseUrl: 'http://106.14.195.68:8989/open'
     };
     config = {
       pages: [
@@ -28,7 +29,12 @@
         'pages/template/list',
         'pages/app/list',
         'pages/app/template',
-        'pages/app/status'
+        'pages/app/status',
+        'pages/system/index',
+        'pages/system/open_user_list',
+        'pages/system/system_user_detail',
+        'pages/system/open_user_business',
+        'pages/system/open_user_func'
       ],
       window: {
         backgroundTextStyle: 'dark',
@@ -58,6 +64,12 @@
             selectedIconPath: 'images/tab/app-active.png',
             pagePath: 'pages/app/list',
             text: '小程序'
+          },
+          {
+            iconPath: 'images/tab/system.png',
+            selectedIconPath: 'images/tab/system-active.png',
+            pagePath: 'pages/system/index',
+            text: '系统管理'
           }
         ]
       }
