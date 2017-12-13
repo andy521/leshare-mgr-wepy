@@ -160,25 +160,25 @@
     position: fixed;
     top: 0;
     width: 101%;
-    height:85rpx;
+    height: rpx(85);
   }
   .box{
-    height: 100rpx;
+    height: rpx(100);
   }
   .edit-box{
-    height: 50rpx;
+    height: rpx(50);
     position: fixed;
     bottom: 0;
-    padding:20rpx 0;
+    padding: rpx(20) 0;
     background-color: white;
     border-top: $border;
     border-bottom: $border;
     width: 100%;
   }
   .select-box{
-    margin-left: 20rpx;
+    margin-left: rpx(20);
   }
   .delete-box{
-    margin-right: 20rpx;
+    margin-right: rpx(20);
   }
 </style>

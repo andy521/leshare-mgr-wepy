@@ -12,11 +12,6 @@
     </view>
   </view>
 
-  <!--<view class="page__bd">-->
-    <!--<view class="weui-btn-area">-->
-      <!--<button type="default" @tap="open">授权类型</button>-->
-    <!--</view>-->
-  <!--</view>-->
 
 
   <view class="box"></view>
@@ -37,8 +32,6 @@
   import base from '../../mixins/base';
   import pagination from '../../mixins/pagination';
   import OpenUser from '../../components/open/open_user';
-  import Event from '../../utils/Event';
-  import Tips from '../../utils/Tips';
   import Placeholder from '../../components/common/placeholder'
 
   export default class UserList extends wepy.page {
@@ -89,19 +82,6 @@
         this.key = this.type[e.detail.value].key;
         this.typeIndex = e.detail.value;
         await this.doLoad(this.key);
-      },
-//      open () {
-//        const list = this.type.map(item => {
-//          return item.name;
-//        });
-//        const that = this;
-//        wx.showActionSheet({
-//          itemList: list,
-//          async success (res) {
-//            that.key = res.tapIndex;
-//            await that.doLoad(res.tapIndex);
-//          }
-//        });
       }
     };
     components = {
@@ -126,9 +106,9 @@
     position: fixed;
     top: 0;
     width: 101%;
-    height:85rpx;
+    height: rpx(85);
   }
   .box{
-    height: 100rpx;
+    height: rpx(100);
   }
 </style>

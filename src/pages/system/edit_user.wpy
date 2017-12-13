@@ -1,0 +1,19 @@
+<template>
+  <view class="container" wx:if="{{init}}">编辑</view>
+</template>
+<script>
+  import wepy from 'wepy';
+
+  export default class EditUser extends wepy.page {
+    def = {
+      init: false
+    };
+    data = {...this.def};
+    async onLoad () {
+      this.loaded();
+    }
+  }
+</script>
+<style lang="scss">
+  @import "../../styles/variable";
+</style>

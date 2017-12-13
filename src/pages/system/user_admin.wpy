@@ -1,0 +1,52 @@
+<template>
+  <view class="container" wx:if="{{init}}">
+    <repeat for="{{page.list}}" key="index" index="index" item="item">
+      <AdminItem :user.sync="item"/>
+    </repeat>
+    <ActionBar @tap.user="add" okText="新增用户"/>
+    <!-- 加载提示 -->
+    <Loadmore :page.sync="page"/>
+    <!--占位符-->
+    <Placeholder :show.sync="isPageEmpty" message="您还没有相关客户信息"/>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy';
+  import useradmin from '../../api/user_admin';
+  import base from '../../mixins/base';
+  import pagination from '../../mixins/pagination';
+  import AdminItem from '../../components/system/user_admin_item';
+  import Placeholder from '../../components/common/placeholder';
+  import Loadmore from '../../components/weui/loadmore';
+  import ActionBar from '../../components/common/action_bar';
+
+  export default class UserAdmin extends wepy.page {
+    def = {
+      init: false,
+      page: {
+        list: []
+      }
+    };
+    data = {...this.def};
+    async onLoad () {
+      this.page = await useradmin.user();
+      this.next();
+    };
+    methods = {
+      add () {}
+    };
+    components = {
+      AdminItem: AdminItem,
+      Placeholder: Placeholder,
+      Loadmore: Loadmore,
+      ActionBar: ActionBar
+    };
+    mixins = [base, pagination];
+    config = {
+      navigationBarTitleText: '用户管理'
+    };
+  }
+</script>
+<style lang="scss">
+  @import "../../styles/variable";
+</style>

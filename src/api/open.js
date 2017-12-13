@@ -6,7 +6,7 @@ export default class open extends base {
    * 查询所有草稿
    */
   static async drafts() {
-    const url = `${this.baseUrl}/code/draft_list`;
+    const url = `${this.openUrl}/code/draft_list`;
     const drafts = await this.get(url);
     drafts.sort((a, b) => b.create_time - a.create_time);
     drafts.forEach(draft => {
@@ -18,7 +18,7 @@ export default class open extends base {
    * 查询所有模板
    */
   static async templates() {
-    const url = `${this.baseUrl}/code/template_list`;
+    const url = `${this.openUrl}/code/template_list`;
     const templates = await this.get(url);
     templates.sort((a, b) => b.create_time - a.create_time);
     templates.forEach(template => {
@@ -32,7 +32,7 @@ export default class open extends base {
    * 查询小程序列表
    */
   static async apps(key) {
-    const url = `${this.baseUrl}/code/app_list?app_template=${key}`;
+    const url = `${this.openUrl}/code/app_list?app_template=${key}`;
     const apps = await this.get(url);
     apps.forEach(app => {
       app.check = false;
@@ -59,7 +59,7 @@ export default class open extends base {
    * 查询系统管理
    */
   static async manageSystem (key) {
-    const url = `${this.newBaseUrl}/users`;
+    const url = `${this.openUrl}/users`;
     const data = await this.get(url);
     const systems = key > 0 ? data.filter(item => item.type == 1) : data.filter(item => item.type == 0);
     systems.forEach(system => {
@@ -88,21 +88,21 @@ export default class open extends base {
    *提交草稿
    */
   static submitDraft(draft) {
-    const url = `${this.baseUrl}/code/template`;
+    const url = `${this.openUrl}/code/template`;
     return this.post(url, draft);
   }
   /***
    * 删除模板
    * */
   static deleteTemplate(template) {
-    const url = `${this.baseUrl}/code/template`;
+    const url = `${this.openUrl}/code/template`;
     return this.delete(url, template);
   }
   /**
    * 提交审核
    */
   static submitAudit(apps) {
-    const url = `${this.baseUrl}/code/submit_audit`;
+    const url = `${this.openUrl}/code/submit_audit`;
     return this.post(url, apps);
   }
 
@@ -110,14 +110,14 @@ export default class open extends base {
    * 提交体验版
    */
   static submitDemo(apps) {
-    const url = `${this.baseUrl}/code/submit_demo`;
+    const url = `${this.openUrl}/code/submit_demo`;
     return this.post(url, apps);
   }
   /****
    * 查询审核结果
    */
   static statusAudit(apps) {
-    const url = `${this.baseUrl}/code/audit/status`;
+    const url = `${this.openUrl}/code/audit/status`;
     return this.post(url, apps);
   }
 
@@ -125,7 +125,7 @@ export default class open extends base {
    * 版本发布
    */
   static publish(apps) {
-    const url = `${this.baseUrl}/code/publish`;
+    const url = `${this.openUrl}/code/publish`;
     return this.post(url, apps)
   }
 
