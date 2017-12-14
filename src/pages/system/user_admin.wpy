@@ -1,7 +1,7 @@
 <template>
   <view class="container" wx:if="{{init}}">
     <repeat for="{{page.list}}" key="index" index="index" item="item">
-      <AdminItem :user.sync="item"/>
+      <AdminItem :user.sync="item" @toEdit.user="toEdit"/>
     </repeat>
     <ActionBar @tap.user="add" okText="新增用户"/>
     <!-- 加载提示 -->
@@ -19,6 +19,7 @@
   import Placeholder from '../../components/common/placeholder';
   import Loadmore from '../../components/weui/loadmore';
   import ActionBar from '../../components/common/action_bar';
+  import Event from '../../utils/Event';
 
   export default class UserAdmin extends wepy.page {
     def = {
@@ -29,11 +30,32 @@
     };
     data = {...this.def};
     async onLoad () {
-      this.page = await useradmin.user();
-      this.next();
+      await this.doLoad();
+      Event.listen(Event.USER_LIST_UPDATE, this.update.bind(this), this);
     };
+    async doLoad() {
+      this.page = await useradmin.userList();
+      this.next();
+    }
+    async onPullDownRefresh () {
+      await this.doLoad();
+      wepy.stopPullDownRefresh();
+    }
     methods = {
-      add () {}
+      toEdit (userId) {
+        const param = {
+          id: userId,
+          mode: 'edit'
+        };
+        this.$root.$navigate('edit_user?param=' + JSON.stringify(param));
+      },
+      add () {
+        const param = {
+          id: null,
+          mode: 'create'
+        };
+        this.$root.$navigate('edit_user?param=' + JSON.stringify(param));
+      }
     };
     components = {
       AdminItem: AdminItem,
@@ -43,7 +65,8 @@
     };
     mixins = [base, pagination];
     config = {
-      navigationBarTitleText: '用户管理'
+      navigationBarTitleText: '用户管理',
+      enablePullDownRefresh: true
     };
   }
 </script>
