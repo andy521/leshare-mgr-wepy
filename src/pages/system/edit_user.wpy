@@ -1,36 +1,38 @@
 <template>
   <Tips/>
   <view class="container" wx:if="{{init}}">
-    <view class="weui-cells weui-cells-form">
-      <view class="weui-cell weui-cell_input">
-        <view class="weui-cell__hd">
-          <view class="weui-label">名称</view>
+    <form @submit="submit">
+      <view class="weui-cells weui-cells-form">
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">名称</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input class="weui-input" name="name" value="{{user.name}}"
+                   type="digit" placeholder="请输入用户名称"/>
+          </view>
         </view>
-        <view class="weui-cell__bd">
-          <input class="weui-input" id="name" @input="input"
-                 value="{{input.name}}" type="digit" placeholder="请输入用户名称"/>
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">电话</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input class="weui-input" name="phone" value="{{user.phone}}"
+                   type="number" maxlength="11" placeholder="请输入用户电话"/>
+          </view>
+        </view>
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">简介</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input class="weui-input" name="note" value="{{user.note}}"
+                   type="digit" placeholder="请输用户简介"/>
+          </view>
         </view>
       </view>
-      <view class="weui-cell weui-cell_input">
-        <view class="weui-cell__hd">
-          <view class="weui-label">电话</view>
-        </view>
-        <view class="weui-cell__bd">
-          <input class="weui-input" id="phone" @input="input"
-                 value="{{input.phone}}" type="number" maxlength="11" placeholder="请输入用户电话"/>
-        </view>
-      </view>
-      <view class="weui-cell weui-cell_input">
-        <view class="weui-cell__hd">
-          <view class="weui-label">简介</view>
-        </view>
-        <view class="weui-cell__bd">
-          <input class="weui-input" id="note" @input="input"
-                 value="{{input.note}}" type="digit" placeholder="请输用户简介"/>
-        </view>
-      </view>
-    </view>
-    <ActionPanel @submit.user="submit" @remove.user="remove" :mode.sync="mode"/>
+      <ActionPanel @remove.user="remove" :mode.sync="mode"/>
+    </form>
   </view>
 </template>
 <script>
@@ -56,7 +58,6 @@
       this.mode = mode;
       if (this.mode == 'edit') {
         this.user = await useradmin.user(this.userId);
-        this.input = this.user;
       }
       this.loaded();
     };
@@ -67,19 +68,21 @@
         Event.emit(Event.USER_LIST_UPDATE);
         wepy.navigateBack();
       },
-      async submit () {
+      async submit ({detail}) {
+        // 覆盖对象
+        Object.assign(this.user, detail.value);
         if (!this.validate()) {
           return;
         }
         if (this.mode == 'create') {
           let seller = {};
-          seller = this.input;
+          seller = this.user;
           seller.avatar = 'http://img.leshare.shop/leshare/logo.jpg';
           console.log(seller);
           await useradmin.addUser(seller);
         } else {
           let seller = {};
-          seller = this.input;
+          seller = this.user;
           seller.avatar = this.user.avatar;
           await useradmin.updataUser(seller, this.userId);
         }
@@ -91,23 +94,23 @@
     validate () {
       const rules = [
         {
-          value: this.input.name,
+          value: this.user.name,
           method: 'required',
           message: '用户名不能为空'
         },
         {
-          value: this.input.name,
+          value: this.user.name,
           method: 'minlength',
           param: 2,
           message: '用户名长度过短'
         },
         {
-          value: this.input.phone,
+          value: this.user.phone,
           method: 'required',
           message: '用户电话不能为空'
         },
         {
-          value: this.input.phone,
+          value: this.user.phone,
           method: 'tel',
           message: '请输入正确的手机格式'
         }
