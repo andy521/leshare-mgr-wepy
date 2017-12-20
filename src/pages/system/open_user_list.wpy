@@ -55,7 +55,9 @@
     };
     async onLoad () {
       this.page = await open.manageSystem();
-      console.info(this.page)
+      this.page.list.filter(item => {
+        item.type = this.key
+      });
       this.next();
     };
     methods = {
@@ -67,7 +69,7 @@
       async typeChange(e) {
         this.key = this.type[e.detail.value].key;
         this.typeIndex = e.detail.value;
-        this.page = await open.manageSystem(this.key);
+        this.page = await open.manageSystem();
         this.next();
       }
     };
