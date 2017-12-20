@@ -1,7 +1,7 @@
 <template>
   <view class="weui-cells weui-cells_after-title">
     <view class="weui-cell">
-      <text class="weui-cell__bd lg mini_width">{{miniProgram}}</text>
+      <text class="weui-cell__bd lg audit_width">{{audit}}</text>
     </view>
   </view>
 </template>
@@ -12,10 +12,10 @@
 
   export default class miniProgram extends wepy.page {
     data = {
-      miniProgram: null
+      audit: null
     };
     onLoad (options, {preload}) {
-      this.miniProgram = preload.param
+      this.audit = preload.param
     };
     methods = {
     };
@@ -24,7 +24,7 @@
     computed = {};
     mixins = [base];
     config = {
-      navigationBarTitleText: '小程序配置'
+      navigationBarTitleText: 'audit'
     };
   }
 </script>
@@ -32,7 +32,7 @@
 <style lang="scss">
   @import "../../styles/variable";
 
-  .mini_width{
+  .audit_width{
     width: 80%;
     word-wrap:break-word;
   }

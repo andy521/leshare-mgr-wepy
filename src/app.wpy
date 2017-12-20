@@ -74,7 +74,12 @@
         'pages/system/user_admin',
         'pages/system/edit_user',
         'pages/home/index',
-        'pages/system/open_user_miniprogram'
+        'pages/system/open_user_miniprogram',
+        'pages/system/system_leApp_list',
+        'pages/system/system_leApp_detail',
+        'pages/system/system_leApp_audit',
+        'pages/system/system_create_leApp',
+        'pages/system/system_edit_leApp'
       ],
       window: {
         backgroundTextStyle: 'dark',

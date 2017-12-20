@@ -1,0 +1,89 @@
+<template>
+  <view class="page__bd">
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell">
+        <view class="weui-cell__bd">ID</view>
+        <view class="weui-cell__ft">{{leAppDetail.id}}</view>
+      </view>
+      <view class="weui-cell">
+        <view class="weui-cell__bd">appCode</view>
+        <view class="weui-cell__ft length">{{leAppDetail.appCode_text}}</view>
+      </view>
+      <view class="weui-cell">
+        <view class="weui-cell__bd">wxAppid</view>
+        <view class="weui-cell__ft">{{leAppDetail.wxAppid_text}}</view>
+      </view>
+      <view class="weui-cell">
+        <view class="weui-cell__bd">wxSecret</view>
+        <view class="weui-cell__ft">{{leAppDetail.wxSecret_text}}</view>
+      </view>
+      <view class="weui-cell">
+        <view class="weui-cell__bd">区域</view>
+        <view class="weui-cell__ft ">{{leAppDetail.leArea}}</view>
+      </view>
+      <view class="weui-cell">
+        <view class="weui-cell__bd">创建时间</view>
+        <view class="weui-cell__ft">{{leAppDetail.createTime_text}}</view>
+      </view>
+      <view class="weui-cell">
+        <view class="weui-cell__bd">名称</view>
+        <view class="weui-cell__ft length">{{leAppDetail.appName}}</view>
+      </view>
+      <view class="weui-cell">
+        <view class="weui-cell__bd">注意事项</view>
+        <view class="weui-cell__ft">{{leAppDetail.remark_text}}</view>
+      </view>
+      <view class="weui-cell">
+        <view class="weui-cell__bd">上线版本</view>
+        <view class="weui-cell__ft">{{leAppDetail.prodVersion_text}}</view>
+      </view>
+      <view class="weui-cell">
+        <view class="weui-cell__bd">体验版本</view>
+        <view class="weui-cell__ft">{{leAppDetail.demoVersion_text}}</view>
+      </view>
+      <view class="weui-cell">
+        <view class="weui-cell__bd">审核版本</view>
+        <view class="weui-cell__ft">{{leAppDetail.auditVersion_text}}</view>
+      </view>
+      <view class="weui-cell weui-cell_access" @tap="audit">
+        <view class="weui-cell__bd">审记</view>
+        <view class="weui-cell__ft weui-cell__ft_in-access length">{{leAppDetail.auditInfo_text}}</view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+
+  export default class LeAppDetail extends wepy.page {
+    data = {
+      leAppDetail: {}
+    };
+
+    onLoad (options, {preload}) {
+      this.leAppDetail = preload.param;
+      wepy.setNavigationBarTitle({title: this.leAppDetail.appName});
+    };
+
+    methods = {
+      audit() {
+        const audit = this.leAppDetail.auditInfo;
+        this.$preload('param', audit);
+        this.$navigate('system_leApp_audit')
+      }
+    };
+    config = {};
+  }
+</script>
+
+<style lang="scss">
+  @import "../../styles/variable";
+
+  .length{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 500rpx;
+  }
+</style>

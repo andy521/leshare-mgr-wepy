@@ -1,0 +1,164 @@
+<template>
+  <Tips/>
+  <form bindsubmit="createLeApp" class="weui-cells-form creates-box">
+    <view class="weui-cell weui-cell_input create-box">
+      <view class="weui-cell__hd">
+        <view class="weui-label">wxAppid</view>
+      </view>
+      <view class="weui-cell__bd">
+        <input class="weui-input" placeholder="请输入wxAppid" id="wxAppid" @input="input" value="{{input.wxAppid}}" />
+      </view>
+    </view>
+    <view class="weui-cell weui-cell_input create-box">
+      <view class="weui-cell__hd">
+        <view class="weui-label">wxSecret</view>
+      </view>
+      <view class="weui-cell__bd">
+        <input class="weui-input" placeholder="请输入wxSecret" id="wxSecret" @input="input" value="{{input.wxSecret}}"/>
+      </view>
+    </view>
+    <view class="weui-cell weui-cell_input create-box">
+      <view class="weui-cell__hd">
+        <view class="weui-label">区域</view>
+      </view>
+      <view class="weui-cell__bd">
+        <input class="weui-input" placeholder="请输入六位数字" id="leArea" @input="input" value="{{input.leArea}}" type="number" maxlength="6"/>
+      </view>
+    </view>
+    <view class=" weui-cell weui-cell_input create-box">
+        <view class="weui-cell__hd">
+          <view class="weui-label">名称</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input class="weui-input" placeholder="请输入名称" id="appName" @input="input" value="{{input.appName}}"/>
+        </view>
+      </view>
+      <view class="weui-cell weui-cell_input create-box">
+        <view class="weui-cell__hd">
+          <view class="weui-label">注意事项</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input class="weui-input" placeholder="请输入注意事项" id="remark" @input="input" value="{{input.remark}}"/>
+        </view>
+      </view>
+      <view class="weui-cell weui-cell_input create-box">
+        <view class="weui-cell__hd">
+          <view class="weui-label">审记</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input class="weui-input" placeholder="请输入审记" id="auditInfo" @input="input" value="{{input.auditInfo}}"/>
+        </view>
+      </view>
+      <view class="zan-panel">
+        <view class="zan-btns">
+          <button class="zan-btn zan-btn--fill" type="primary" form-type="submit">创建</button>
+          <button class="zan-btn" data-wpyremove-a="19" @tap.stop="remove">取消</button>
+        </view>
+      </view>
+  </form>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import ActionBar from '../../components/common/action_bar';
+  import system from '../../api/system';
+  import base from '../../mixins/base';
+  import input from '../../mixins/input';
+  import Event from '../../utils/Event';
+  import Tips from '../../utils/Tips';
+  import FormTips from '../../components/weui/tips';
+
+  export default class CreateLeApp extends wepy.page {
+    data = {
+    };
+    onLoad() {
+    };
+    methods = {
+      async createLeApp () {
+        try {
+          if (!this.validate()) {
+            return;
+          }
+          const param = {
+            wxAppid: this.input.wxAppid,
+            wxSecret: this.input.wxSecret,
+            leArea: this.input.leArea,
+            appName: this.input.appName,
+            remark: this.input.remark,
+            auditInfo: this.input.auditInfo
+          };
+          console.info(param);
+          await system.createLeApp(param);
+          await Tips.success('创建成功！');
+          Event.emit(Event.SYSTEM_LEAPP_UPDATE);
+        } finally {
+          this.loaded();
+        }
+        wepy.navigateBack();
+      },
+      async remove() {
+        await Tips.confirm('确认取消该操作？');
+        await Tips.success('取消成功');
+        wepy.navigateBack();
+      }
+    };
+    validate () {
+      const rules = [
+        {
+          value: this.input.wxAppid,
+          method: 'required',
+          message: 'wxAppid不能为空'
+        },
+        {
+          value: this.input.wxSecret,
+          method: 'required',
+          message: 'wxSecret不能为空'
+        },
+        {
+          value: this.input.leArea,
+          method: 'required',
+          message: '区域不能为空'
+        },
+        {
+          value: this.input.leArea,
+          method: 'number',
+          message: '区域必须为数字'
+        },
+        {
+          value: this.input.leArea,
+          method: 'minlength',
+          param: 6,
+          message: '区域需有六位'
+        },
+        {
+          value: this.input.appName,
+          method: 'required',
+          message: '名称不能为空'
+        }
+      ];
+      return this.check(rules);
+    }
+    components = {
+      ActionBar: ActionBar,
+      Tips: FormTips
+    };
+    mixins = [base, input];
+    config = {
+      navigationBarTitleText: '创建应用'
+    }
+  }
+</script>
+
+<style lang="scss">
+  @import "../../styles/variable";
+
+  .create-box:first-child{
+    margin-top: 20rpx;
+  }
+  .create-box{
+    background-color: #fff;
+  }
+  .button-box{
+    margin-top: 20rpx;
+  }
+</style>

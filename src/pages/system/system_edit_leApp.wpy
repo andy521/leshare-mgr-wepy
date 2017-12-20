@@ -1,0 +1,168 @@
+<template>
+  <Tips/>
+  <form bindsubmit="createLeApp" class="weui-cells-form creates-box">
+    <view class="weui-cell weui-cell_input create-box">
+      <view class="weui-cell__hd">
+        <view class="weui-label">区域</view>
+      </view>
+      <view class="weui-cell__bd">
+        <input class="weui-input" placeholder="请输入六位数字" id="leArea" @input="input" value="{{input.leArea}}" type="number" maxlength="6"/>
+      </view>
+    </view>
+    <view class="weui-cell weui-cell_input create-box">
+      <view class="weui-cell__hd">
+        <view class="weui-label">应用程序模板</view>
+      </view>
+      <view class="weui-cell__bd">
+        <input class="weui-input" placeholder="请输入应用程序模板" id="appTemplate" @input="input" value="{{input.appTemplate}}" type="number"/>
+      </view>
+    </view>
+    <view class="weui-cell weui-cell_input create-box">
+      <view class="weui-cell__hd">
+        <view class="weui-label">店铺类型</view>
+      </view>
+      <view class="weui-cell__bd">
+        <input class="weui-input" placeholder="请输入店铺类型字" id="shopType" @input="input" value="{{input.shopType}}"  type="number"/>
+      </view>
+    </view>
+    <view class=" weui-cell weui-cell_input create-box">
+      <view class="weui-cell__hd">
+        <view class="weui-label">名称</view>
+      </view>
+      <view class="weui-cell__bd">
+        <input class="weui-input" placeholder="请输入名称" id="appName" @input="input" value="{{input.appName}}"/>
+      </view>
+    </view>
+    <view class="weui-cell weui-cell_input create-box">
+      <view class="weui-cell__hd">
+        <view class="weui-label">注意事项</view>
+      </view>
+      <view class="weui-cell__bd">
+        <input class="weui-input" placeholder="请输入注意事项" id="remark" @input="input" value="{{input.remark}}"/>
+      </view>
+    </view>
+    <view class="zan-panel">
+      <view class="zan-btns">
+        <button class="zan-btn zan-btn--fill" type="primary" form-type="submit">保存</button>
+        <button class="zan-btn" @tap.stop="remove">取消</button>
+      </view>
+    </view>
+  </form>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import ActionBar from '../../components/common/action_bar';
+  import system from '../../api/system';
+  import base from '../../mixins/base';
+  import input from '../../mixins/input';
+  import Event from '../../utils/Event';
+  import Tips from '../../utils/Tips';
+  import FormTips from '../../components/weui/tips';
+
+  export default class EditLeApp extends wepy.page {
+    data = {
+      id: null
+    };
+    onLoad(options, {preload}) {
+      this.input = preload.param;
+      this.id = this.input.id;
+    }
+    methods = {
+      async createLeApp () {
+        try {
+          if (!this.validate()) {
+            return;
+          }
+          const param = {
+            leArea: this.input.leArea,
+            appTemplate: this.input.appTemplate,
+            shopType: this.input.shopType,
+            appName: this.input.appName,
+            remark: this.input.remark,
+            id: this.input.id
+          };
+          await system.updateLeApp(this.id, param);
+          await Tips.success('编辑成功！');
+          Event.emit(Event.SYSTEM_LEAPP_UPDATE);
+        } finally {
+          this.loaded();
+        }
+        wepy.navigateBack();
+      },
+      async remove() {
+        await Tips.confirm('确认取消该操作？');
+        await Tips.success('取消成功');
+        wepy.navigateBack();
+      }
+    };
+    validate () {
+      const rules = [
+        {
+          value: this.input.leArea,
+          method: 'required',
+          message: '区域不能为空'
+        },
+        {
+          value: this.input.leArea,
+          method: 'number',
+          message: '区域必须为数字'
+        },
+        {
+          value: this.input.leArea,
+          method: 'minlength',
+          param: 6,
+          message: '区域需有六位'
+        },
+        {
+          value: this.input.appTemplate,
+          method: 'required',
+          message: '应用程序模板不能为空'
+        },
+        {
+          value: this.input.appTemplate,
+          method: 'number',
+          message: '应用程序模板必须为数字'
+        },
+        {
+          value: this.input.shopType,
+          method: 'required',
+          message: '店铺类型不能为空'
+        },
+        {
+          value: this.input.shopType,
+          method: 'number',
+          message: '店铺类型必须为数字'
+        },
+        {
+          value: this.input.appName,
+          method: 'required',
+          message: '名称不能为空'
+        }
+      ];
+      return this.check(rules);
+    }
+    components = {
+      ActionBar: ActionBar,
+      Tips: FormTips
+    };
+    mixins = [base, input];
+    config = {
+      navigationBarTitleText: '编辑应用'
+    }
+  }
+</script>
+
+<style lang="scss">
+  @import "../../styles/variable";
+
+  .create-box:first-child{
+    margin-top: 20rpx;
+  }
+  .create-box{
+    background-color: #fff;
+  }
+  .button-box{
+    margin-top: 20rpx;
+  }
+</style>

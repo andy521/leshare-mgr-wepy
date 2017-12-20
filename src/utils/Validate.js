@@ -89,13 +89,13 @@ export default class Validate {
    * 验证最小长度
    */
   static minlength(value, param) {
-    return this.optional(value) || value.length >= param
+    return this.optional(value) || String(value).length >= param
   }
   /**
    * 验证最大长度
    */
   static maxlength(value, param) {
-    return this.optional(value) || value.length <= param
+    return this.optional(value) || String(value).length <= param
   }
   /**
    * 验证一个长度范围[min, max]

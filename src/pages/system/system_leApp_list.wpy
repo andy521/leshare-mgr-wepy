@@ -1,0 +1,80 @@
+<template>
+  <repeat for="{{page.list}}" key="index" index="index" item="item">
+    <App :app.sync="item" @check.user="check" @edit.user="edit"/>
+  </repeat>
+
+  <view class="box"></view>
+  <view class="button-box" @tap.stop="add"><button type="primary">创建应用</button></view>
+  <Placeholder :show.sync="isPageEmpty" />
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import system from '../../api/system';
+  import base from '../../mixins/base';
+  import pagination from '../../mixins/pagination';
+  import Placeholder from '../../components/common/placeholder';
+  import App from '../../components/open/leApp';
+  import ActionBar from '../../components/common/action_bar';
+  import Loadmore from '../../components/weui/loadmore';
+  import Event from '../../utils/Event';
+
+  export default class LeAppList extends wepy.page {
+    data = {
+      page: {}
+    };
+    async onLoad () {
+      this.page = await system.getLeApp();
+      this.next();
+      Event.listen(Event.SYSTEM_LEAPP_UPDATE, this.update.bind(this), this);
+    };
+    methods = {
+      check(id) {
+        const app = this.page.list.find(item => item.id == id);
+        this.$preload('param', app);
+        this.$navigate('system_leApp_detail');
+      },
+      add() {
+        this.$navigate('system_create_leApp');
+      },
+      edit(id) {
+        const app = this.page.list.find(item => item.id == id);
+        this.$preload('param', app);
+        this.$navigate('system_edit_leApp');
+      }
+    };
+    components = {
+      Placeholder: Placeholder,
+      App: App,
+      ActionBar: ActionBar,
+      Loadmore: Loadmore
+    };
+    computed = {};
+    mixins = [base, pagination];
+    config = {
+      navigationBarTitleText: '应该管理',
+      enablePullDownRefresh: true
+    };
+  }
+</script>
+
+<style lang="scss">
+  @import "../../styles/variable";
+
+  .type-box{
+    background-color: #fff;
+    margin-right: -1px;
+    position: fixed;
+    top: 0;
+    width: 101%;
+    height: rpx(85);
+  }
+  .box{
+    height: rpx(100);
+  }
+  .button-box{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+</style>

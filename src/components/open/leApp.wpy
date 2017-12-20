@@ -1,0 +1,40 @@
+<template>
+  <view class="row-between app-box">
+    <view class="column">
+      <text class="ml20 lg">{{app.appName}}</text>
+      <text class="ml20 xs muted">审核:{{app.auditVersion_text}} 体验:{{app.demoVersion_text}} 上线:{{app.prodVersion_text}}</text>
+    </view>
+    <view>
+      <view class="label-box zan-btn zan-btn--small" @tap.stop="check({{app.id}})">查询</view>
+      <view class="label-box zan-btn zan-btn--small zan-btn--primary" @tap.stop="edit({{app.id}})">编辑</view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+
+  export default class App extends wepy.component {
+    props ={
+      app: {}
+    };
+    methods = {
+      async check(id) {
+        this.$emit('check', id);
+      },
+      edit(id) {
+        this.$emit('edit', id);
+      }
+    }
+  }
+</script>
+
+<style lang="scss">
+  @import "../../styles/variable";
+  .app-box{
+    padding: 20rpx;
+    background-color: white;
+    border-top: $border;
+    border-bottom: $border;
+  }
+</style>

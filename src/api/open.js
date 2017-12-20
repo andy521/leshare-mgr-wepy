@@ -1,5 +1,5 @@
 import base from './base'
-import wepy from 'wepy';
+import Page from '../utils/Page';
 
 export default class open extends base {
   /**
@@ -58,25 +58,20 @@ export default class open extends base {
   /***
    * 查询系统管理
    */
-  static async manageSystem (key) {
+  static async manageSystem () {
     const url = `${this.openUrl}/users`;
-    const data = await this.get(url);
-    const systems = key > 0 ? data.filter(item => item.type == 1) : data.filter(item => item.type == 0);
-    systems.forEach(system => {
-      system.verify_type_info_text = this._processVerifyType(system.verify_type_info);
-      system.is_use_text = this._processIsUse(system.is_use);
-      system.service_type_info_text = this._processServiceType(system.service_type_info);
-      system.type_text = this._processType(system.type);
-      system.business_info_text = this._processBusiness(system.business_info);
-      system.func_info_text = this._processFunc(system.func_info);
-      if (system.head_img === null) {
-        system.head_img = '/images/icons/img.png'
-      }
-      if (system.nick_name === '') {
-        system.nick_name = '未知'
-      }
-    });
-    return systems;
+    return new Page(url, this.processManageSystemItem.bind(this));
+  }
+  static processManageSystemItem(item) {
+    item.verify_type_info_text = this._processVerifyType(item.verify_type_info);
+    item.is_use_text = this._processIsUse(item.is_use);
+    item.service_type_info_text = this._processServiceType(item.service_type_info);
+    item.type_text = this._processType(item.type);
+    item.business_info_text = this._processBusiness(item.business_info);
+    item.func_info_text = this._processFunc(item.func_info);
+    item.head_img = item.head_img === null ? '/images/icons/img.png' : item.head_img;
+    item.nick_name = item.nick_name === '' ? '未知' : item.nick_name;
+    return item
   }
 
   // 处理时间

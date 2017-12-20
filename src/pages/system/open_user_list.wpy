@@ -16,7 +16,7 @@
 
   <view class="box"></view>
 
-  <repeat for="{{systems}}" key="index" index="index" item="item">
+  <repeat for="{{page.list}}" key="index" index="index" item="item">
 
     <OpenUser :system.sync="item" @check.user="check"/>
 
@@ -36,7 +36,7 @@
 
   export default class UserList extends wepy.page {
     data = {
-      systems: null,
+      page: [],
       type: [
         {
           id: 1,
@@ -54,34 +54,21 @@
       actionSheetHidden: true
     };
     async onLoad () {
-      console.info(await this.doLoad());
+      this.page = await open.manageSystem();
+      console.info(this.page)
+      this.next();
     };
-    async doLoad () {
-      try {
-        this.systems = await open.manageSystem(this.key);
-        this.empty = this.systems.length < 1;
-      } catch (e) {
-        this.systems = [];
-        this.empty = true;
-        console.error(e);
-      } finally {
-        this.loaded();
-      }
-    }
-    async onPullDownRefresh () {
-      await this.doLoad();
-      wepy.stopPullDownRefresh();
-    }
     methods = {
       check(id) {
-        const system = this.systems.find(item => item.id == id);
+        const system = this.page.find(item => item.id == id);
         this.$preload('param', system);
         this.$navigate('system_user_detail');
       },
       async typeChange(e) {
         this.key = this.type[e.detail.value].key;
         this.typeIndex = e.detail.value;
-        await this.doLoad(this.key);
+        this.page = await open.manageSystem(this.key);
+        this.next();
       }
     };
     components = {
