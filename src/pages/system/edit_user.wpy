@@ -1,17 +1,130 @@
 <template>
-  <view class="container" wx:if="{{init}}">编辑</view>
+  <Tips/>
+  <view class="container" wx:if="{{init}}">
+    <form @submit="submit">
+      <view class="weui-cells weui-cells-form">
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">名称</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input class="weui-input" name="name" value="{{user.name}}"
+                   type="digit" placeholder="请输入用户名称"/>
+          </view>
+        </view>
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">电话</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input class="weui-input" name="phone" value="{{user.phone}}"
+                   type="number" maxlength="11" placeholder="请输入用户电话"/>
+          </view>
+        </view>
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">简介</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input class="weui-input" name="note" value="{{user.note}}"
+                   type="digit" placeholder="请输用户简介"/>
+          </view>
+        </view>
+      </view>
+      <ActionPanel @remove.user="remove" :mode.sync="mode"/>
+    </form>
+  </view>
 </template>
 <script>
   import wepy from 'wepy';
-
+  import base from '../../mixins/base';
+  import input from '../../mixins/input';
+  import useradmin from '../../api/user_admin';
+  import FormTips from '../../components/weui/tips';
+  import ActionPanel from '../../components/common/action_panel';
+  import Tips from '../../utils/Tips';
+  import Event from '../../utils/Event';
   export default class EditUser extends wepy.page {
     def = {
-      init: false
+      init: false,
+      mode: 'create',
+      userId: null,
+      user: {}
     };
     data = {...this.def};
-    async onLoad () {
+    async onLoad (option) {
+      const {id, mode} = JSON.parse(option.param);
+      this.userId = id;
+      this.mode = mode;
+      if (this.mode == 'edit') {
+        this.user = await useradmin.user(this.userId);
+      }
       this.loaded();
-    }
+    };
+    methods = {
+      async remove() {
+        await useradmin.deleteUser(this.userId);
+        Tips.success('删除成功');
+        Event.emit(Event.USER_LIST_UPDATE);
+        wepy.navigateBack();
+      },
+      async submit ({detail}) {
+        // 覆盖对象
+        Object.assign(this.user, detail.value);
+        if (!this.validate()) {
+          return;
+        }
+        if (this.mode == 'create') {
+          let seller = {};
+          seller = this.user;
+          seller.avatar = 'http://img.leshare.shop/leshare/logo.jpg';
+          console.log(seller);
+          await useradmin.addUser(seller);
+        } else {
+          let seller = {};
+          seller = this.user;
+          seller.avatar = this.user.avatar;
+          await useradmin.updataUser(seller, this.userId);
+        }
+        Tips.success('保存成功');
+        Event.emit(Event.USER_LIST_UPDATE);
+        wepy.navigateBack();
+      }
+    };
+    validate () {
+      const rules = [
+        {
+          value: this.user.name,
+          method: 'required',
+          message: '用户名不能为空'
+        },
+        {
+          value: this.user.name,
+          method: 'minlength',
+          param: 2,
+          message: '用户名长度过短'
+        },
+        {
+          value: this.user.phone,
+          method: 'required',
+          message: '用户电话不能为空'
+        },
+        {
+          value: this.user.phone,
+          method: 'tel',
+          message: '请输入正确的手机格式'
+        }
+      ];
+      return this.check(rules);
+    };
+    config = {
+      navigationBarTitleText: '用户编辑'
+    };
+    components = {
+      ActionPanel: ActionPanel,
+      Tips: FormTips
+    };
+    mixins = [base, input];
   }
 </script>
 <style lang="scss">
