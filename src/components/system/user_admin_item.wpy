@@ -1,5 +1,5 @@
 <template>
-  <view class="admin-box row">
+  <view class="admin-box row" @tap="toEdit({{user.id}})">
     <image class="icon-xxl avatar mr20" src="{{user.avatar ? user.avatar : '/images/icons/customer.png'}}"/>
     <view class="column" style="width: 70%">
       <text class="lg">{{user.name ? user.name : '管理员'}}</text>
@@ -19,6 +19,9 @@
       user: {}
     };
     methods = {
+      toEdit (userId) {
+        this.$emit('toEdit', userId);
+      },
       phone () {
         if (this.user) {
           wepy.makePhoneCall({phoneNumber: this.user.phone});
