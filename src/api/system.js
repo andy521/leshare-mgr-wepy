@@ -46,4 +46,12 @@ export default class system extends base {
     const url = `${this.systemUrl}/leApp?id=${id}`;
     return await this.put(url, app);
   }
+
+  /***
+   * 查询店铺信息
+   */
+  static async getShopList() {
+    const url = `${this.systemUrl}/shops`;
+    return new Page(url)
+  }
 }

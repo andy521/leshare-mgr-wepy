@@ -1,0 +1,52 @@
+<template>
+  <view class="container" wx:if="{{init}}">
+    <!--<repeat for="{{page.list}}" key="index" index="index" item="item">-->
+      <!--<ShopItem :user.sync="item" @toEdit.user="toEdit"/>-->
+    <!--</repeat>-->
+    <view>
+      <image />
+      <view></view>
+    </view>
+    <ActionBar @tap.user="add" okText="新增用户"/>
+    <!-- 加载提示 -->
+    <Loadmore :page.sync="page"/>
+    <!--占位符-->
+    <Placeholder :show.sync="isPageEmpty" message="您还没有相关客户信息"/>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import base from '../../mixins/base';
+  import pagination from '../../mixins/pagination';
+  import ShopItem from '../../components/system/user_admin_item';
+  import Placeholder from '../../components/common/placeholder';
+  import Loadmore from '../../components/weui/loadmore';
+  import ActionBar from '../../components/common/action_bar';
+  import Event from '../../utils/Event';
+  import system from '../../api/system';
+
+  export default class ShopList extends wepy.page {
+    data = {
+      page: []
+    };
+    async onLoad () {
+      this.page = await system.getShopList();
+    }
+    components = {
+      ShopItem: ShopItem,
+      Placeholder: Placeholder,
+      Loadmore: Loadmore,
+      ActionBar: ActionBar
+    };
+    mixins = [base, pagination];
+    config = {
+      navigationBarTitleText: '店铺管理',
+      enablePullDownRefresh: true
+    };
+  }
+</script>
+
+<style lang="scss">
+
+</style>

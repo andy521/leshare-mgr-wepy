@@ -116,7 +116,7 @@
   import FormTips from '../../components/weui/tips';
   import ImageUploader from '../../components/system/image_uploader';
   import SliderSelector from '../../components/common/slider_selector';
-    import Tips from '../../utils/Tips';
+  import Tips from '../../utils/Tips';
   import WxUtils from '../../utils/WxUtils';
 
   export default class ShopEdit extends wepy.page {
