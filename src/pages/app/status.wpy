@@ -1,19 +1,21 @@
 <template>
-  <repeat for="{{results}}">
-    <AppStatus :status.sync="item"/>
-  </repeat>
+  <view class="container" wx:if="{{init}}">
+    <repeat for="{{results}}">
+      <AppStatus :status.sync="item"/>
+    </repeat>
+  </view>
 </template>
 
 <script>
   import wepy from 'wepy';
   import base from '../../mixins/base';
-//  import open from '../../api/open';
   import AppStatus from '../../components/open/app_status';
   //  import Event from '../../utils/Event';
 //  import Tips from '../../utils/Tips'
 
   export default class TemplateList extends wepy.page {
     data = {
+      init: false,
       results: []
     };
     async onLoad (options, {preload}) {
@@ -30,17 +32,12 @@
         if (item.errmsg === 'ok') {
           item.errmsg = '';
         }
-      })
+      });
+      this.loaded();
     };
-    async doLoad() {
-    }
-    async onPullDownRefresh () {
-      await this.doLoad();
-      wepy.stopPullDownRefresh();
-    }
     methods = {
       back() {
-        this.$switch('list')
+        this.$switch('list');
       }
     };
     components = {

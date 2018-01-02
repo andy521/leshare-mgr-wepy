@@ -1,21 +1,23 @@
 <template>
-  <view class="weui-cells weui-cells_after-title">
-    <navigator url="open_user_list" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
-      <view class="weui-cell__bd">开放平台</view>
-      <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-    </navigator>
-    <navigator url="system_leApp_list" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
-      <view class="weui-cell__bd">应用管理</view>
-      <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-    </navigator>
-    <navigator url="" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
-      <view class="weui-cell__bd">店铺管理</view>
-      <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-    </navigator>
-    <navigator url="./user_admin" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
-      <view class="weui-cell__bd">用户管理</view>
-      <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-    </navigator>
+  <view class="container" wx:if="{{init}}">
+    <view class="weui-cells weui-cells_after-title">
+      <navigator url="open_user_list" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+        <view class="weui-cell__bd">开放平台</view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+      <navigator url="system_leApp_list" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+        <view class="weui-cell__bd">应用管理</view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+      <navigator url="shop_edit" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+        <view class="weui-cell__bd">店铺管理</view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+      <navigator url="./user_admin" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+        <view class="weui-cell__bd">用户管理</view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+    </view>
   </view>
 </template>
 
@@ -25,8 +27,10 @@
 
   export default class DraftList extends wepy.page {
     data = {
+      init: false
     };
     onLoad () {
+      this.loaded();
     };
     methods = {
     };

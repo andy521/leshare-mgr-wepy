@@ -1,61 +1,63 @@
 <template>
   <Tips/>
-  <form bindsubmit="createLeApp" class="weui-cells-form creates-box">
-    <view class="weui-cell weui-cell_input create-box">
-      <view class="weui-cell__hd">
-        <view class="weui-label">wxAppid</view>
-      </view>
-      <view class="weui-cell__bd">
-        <input class="weui-input" placeholder="请输入wxAppid" id="wxAppid" @input="input" value="{{input.wxAppid}}" />
-      </view>
-    </view>
-    <view class="weui-cell weui-cell_input create-box">
-      <view class="weui-cell__hd">
-        <view class="weui-label">wxSecret</view>
-      </view>
-      <view class="weui-cell__bd">
-        <input class="weui-input" placeholder="请输入wxSecret" id="wxSecret" @input="input" value="{{input.wxSecret}}"/>
-      </view>
-    </view>
-    <view class="weui-cell weui-cell_input create-box">
-      <view class="weui-cell__hd">
-        <view class="weui-label">区域</view>
-      </view>
-      <view class="weui-cell__bd">
-        <input class="weui-input" placeholder="请输入六位数字" id="leArea" @input="input" value="{{input.leArea}}" type="number" maxlength="6"/>
-      </view>
-    </view>
-    <view class=" weui-cell weui-cell_input create-box">
+  <view class="container" wx:if="{{init}}">
+    <form bindsubmit="createLeApp" class="weui-cells-form creates-box">
+      <view class="weui-cell weui-cell_input create-box">
         <view class="weui-cell__hd">
-          <view class="weui-label">名称</view>
+          <view class="weui-label">wxAppid</view>
         </view>
         <view class="weui-cell__bd">
-          <input class="weui-input" placeholder="请输入名称" id="appName" @input="input" value="{{input.appName}}"/>
+          <input class="weui-input" placeholder="请输入wxAppid" id="wxAppid" @input="input" value="{{input.wxAppid}}"/>
         </view>
       </view>
       <view class="weui-cell weui-cell_input create-box">
         <view class="weui-cell__hd">
-          <view class="weui-label">注意事项</view>
+          <view class="weui-label">wxSecret</view>
         </view>
         <view class="weui-cell__bd">
-          <input class="weui-input" placeholder="请输入注意事项" id="remark" @input="input" value="{{input.remark}}"/>
+          <input class="weui-input" placeholder="请输入wxSecret" id="wxSecret" @input="input" value="{{input.wxSecret}}"/>
         </view>
       </view>
       <view class="weui-cell weui-cell_input create-box">
         <view class="weui-cell__hd">
-          <view class="weui-label">审记</view>
+          <view class="weui-label">区域</view>
         </view>
         <view class="weui-cell__bd">
-          <input class="weui-input" placeholder="请输入审记" id="auditInfo" @input="input" value="{{input.auditInfo}}"/>
+          <input class="weui-input" placeholder="请输入六位数字" id="leArea" @input="input" value="{{input.leArea}}"
+                 type="number" maxlength="6"/>
+        </view>
+      </view>
+      <view class=" weui-cell weui-cell_input create-box">
+        <view class="weui-cell__hd">
+          <view class="weui-label">应用名称</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input class="weui-input" placeholder="请输入应用名称" id="appName" @input="input" value="{{input.appName}}"/>
+        </view>
+      </view>
+      <view class="weui-cell weui-cell_input create-box">
+        <view class="weui-cell__hd">
+          <view class="weui-label">备注</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input class="weui-input" placeholder="请输入备注" id="remark" @input="input" value="{{input.remark}}"/>
+        </view>
+      </view>
+      <view class="weui-cell weui-cell_input create-box">
+        <view class="weui-cell__hd">
+          <view class="weui-label">审核查询</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input class="weui-input" placeholder="请输入审核查询" id="auditInfo" @input="input" value="{{input.auditInfo}}"/>
         </view>
       </view>
       <view class="zan-panel">
         <view class="zan-btns">
           <button class="zan-btn zan-btn--fill" type="primary" form-type="submit">创建</button>
-          <button class="zan-btn" data-wpyremove-a="19" @tap.stop="remove">取消</button>
         </view>
       </view>
-  </form>
+    </form>
+  </view>
 </template>
 
 <script>
@@ -70,8 +72,10 @@
 
   export default class CreateLeApp extends wepy.page {
     data = {
+      init: false
     };
     onLoad() {
+      this.loaded();
     };
     methods = {
       async createLeApp () {
@@ -94,11 +98,6 @@
         } finally {
           this.loaded();
         }
-        wepy.navigateBack();
-      },
-      async remove() {
-        await Tips.confirm('确认取消该操作？');
-        await Tips.success('取消成功');
         wepy.navigateBack();
       }
     };

@@ -1,7 +1,9 @@
 <template>
-  <view class="weui-cells weui-cells_after-title">
-    <view class="weui-cell">
-      <text class="weui-cell__bd lg mini_width">{{miniProgram}}</text>
+  <view class="container" wx:if="{{init}}">
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell">
+        <text class="weui-cell__bd lg mini_width">{{miniProgram}}</text>
+      </view>
     </view>
   </view>
 </template>
@@ -12,10 +14,12 @@
 
   export default class miniProgram extends wepy.page {
     data = {
-      miniProgram: null
+      miniProgram: null,
+      init: false
     };
     onLoad (options, {preload}) {
-      this.miniProgram = preload.param
+      this.miniProgram = preload.param;
+      this.loaded();
     };
     methods = {
     };

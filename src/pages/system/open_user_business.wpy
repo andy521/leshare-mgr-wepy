@@ -1,11 +1,14 @@
 <template>
-  <view class="weui-cells weui-cells_after-title">
+  <view class="container" wx:if="{{init}}">
+    <view class="weui-cells weui-cells_after-title">
       <view class="weui-cell weui-check__label" wx:for="{{business}}" wx:key="title">
         <view class="label-box">
-          <icon class="weui-icon-checkbox_{{!item.check ? 'circle':'success'}}circle" type="{{!item.check ? 'circle':'success'}}" size="23"></icon>
+          <icon class="weui-icon-checkbox_{{!item.check ? 'circle':'success'}}circle"
+                type="{{!item.check ? 'circle':'success'}}" size="23"></icon>
         </view>
         <view class="weui-cell__bd ml20">{{item.title}}</view>
       </view>
+    </view>
   </view>
 </template>
 
@@ -16,6 +19,7 @@
   export default class Business extends wepy.page {
     data = {
       param: null,
+      init: false,
       business: [
         {
           title: '是否开通微信门店功能',
@@ -50,6 +54,7 @@
         item.param = this.param[index];
         item.check = item.param === '有权限';
       });
+      this.loaded();
     };
     methods = {
     };

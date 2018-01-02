@@ -1,9 +1,10 @@
 <template>
-  <repeat for="{{drafts}}" key="index" index="index" item="item">
-    <Draft :draft.sync="item" @submit.user="submit"/>
-  </repeat>
-
-  <Placeholder :show.sync="empty" />
+  <view class="container" wx:if="{{init}}">
+    <repeat for="{{drafts}}" key="index" index="index" item="item">
+      <Draft :draft.sync="item" @submit.user="submit"/>
+    </repeat>
+    <Placeholder :show.sync="empty"/>
+  </view>
 </template>
 
 <script>
@@ -18,7 +19,8 @@
   export default class DraftList extends wepy.page {
     data = {
       drafts: null,
-      empty: true
+      empty: true,
+      init: false
     };
     async onLoad () {
       await this.doLoad();

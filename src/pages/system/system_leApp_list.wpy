@@ -1,11 +1,17 @@
 <template>
-  <repeat for="{{page.list}}" key="index" index="index" item="item">
-    <App :app.sync="item" @check.user="check" @edit.user="edit"/>
-  </repeat>
+  <view class="container" wx:if="{{init}}">
+    <repeat for="{{page.list}}" key="index" index="index" item="item">
+      <App :app.sync="item" @check.user="check" @edit.user="edit"/>
+    </repeat>
 
-  <view class="box"></view>
-  <view class="button-box" @tap.stop="add"><button type="primary">创建应用</button></view>
-  <Placeholder :show.sync="isPageEmpty" />
+    <view class="box"></view>
+    <view class="zan-panel button-box">
+      <view class="zan-btns">
+        <button class="zan-btn zan-btn--fill" type="primary" @tap.stop="add">创建应用</button>
+      </view>
+    </view>
+    <Placeholder :show.sync="isPageEmpty" />
+  </view>
 </template>
 
 <script>
@@ -21,7 +27,8 @@
 
   export default class LeAppList extends wepy.page {
     data = {
-      page: {}
+      page: {},
+      init: false
     };
     async onLoad () {
       this.page = await system.getLeApp();
@@ -70,7 +77,7 @@
     height: rpx(85);
   }
   .box{
-    height: rpx(100);
+    height: rpx(200);
   }
   .button-box{
     position: fixed;

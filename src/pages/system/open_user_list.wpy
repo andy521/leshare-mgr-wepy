@@ -1,29 +1,24 @@
 <template>
-  <view class="weui-cells weui-cells_after-title">
-    <view class="weui-cell weui-cell_select type-box">
-      <view class="weui-cell__hd weui-cell__hd_in-select-after">
-        <view class="weui-label">授权类型</view>
-      </view>
-      <view class="weui-cell__bd">
-        <picker bindchange="typeChange" value="{{typeIndex}}" range="{{type}}" range-key="{{'name'}}">
-          <view class="weui-select weui-select_in-select-after">{{type[typeIndex].name}}</view>
-        </picker>
+  <view class="container" wx:if="{{init}}">
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell weui-cell_select type-box">
+        <view class="weui-cell__hd weui-cell__hd_in-select-after">
+          <view class="weui-label">授权类型</view>
+        </view>
+        <view class="weui-cell__bd">
+          <picker bindchange="typeChange" value="{{typeIndex}}" range="{{type}}" range-key="{{'name'}}">
+            <view class="weui-select weui-select_in-select-after">{{type[typeIndex].name}}</view>
+          </picker>
+        </view>
       </view>
     </view>
+    <view class="box"></view>
+    <repeat for="{{page.list}}" key="index" index="index" item="item">
+      <OpenUser :system.sync="item" @check.user="check"/>
+    </repeat>
+    <!--占位符-->
+    <Placeholder :show.sync="empty" />
   </view>
-
-
-
-  <view class="box"></view>
-
-  <repeat for="{{page.list}}" key="index" index="index" item="item">
-
-    <OpenUser :system.sync="item" @check.user="check"/>
-
-  </repeat>
-
-  <!--占位符-->
-  <Placeholder :show.sync="empty" />
 </template>
 
 <script>
@@ -37,6 +32,7 @@
   export default class UserList extends wepy.page {
     data = {
       page: [],
+      init: false,
       type: [
         {
           id: 1,
@@ -60,17 +56,21 @@
       });
       this.next();
     };
+    params() {
+      return {
+        type: this.key
+      };
+    };
     methods = {
       check(id) {
-        const system = this.page.find(item => item.id == id);
+        const system = this.page.list.find(item => item.id == id);
         this.$preload('param', system);
         this.$navigate('system_user_detail');
       },
       async typeChange(e) {
         this.key = this.type[e.detail.value].key;
         this.typeIndex = e.detail.value;
-        this.page = await open.manageSystem();
-        this.next();
+        await this.reload();
       }
     };
     components = {

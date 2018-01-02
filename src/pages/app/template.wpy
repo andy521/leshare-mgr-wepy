@@ -1,15 +1,16 @@
 <template>
-  <view class="row">
-    <radio-group class="radio-group-box" bindchange="radioChange">
-      <repeat for="{{templates}}" key="index" index="index" item="item">
-        <!--处理select-->
-        <AppTemplate :template.sync="item"/>
-      </repeat>
-    </radio-group>
+  <view class="container" wx:if="{{init}}">
+    <view class="row">
+      <radio-group class="radio-group-box" bindchange="radioChange">
+        <repeat for="{{templates}}" key="index" index="index" item="item">
+          <!--处理select-->
+          <AppTemplate :template.sync="item"/>
+        </repeat>
+      </radio-group>
+    </view>
+    <!--编辑栏-->
+    <ActionBar @tap.user="add" okText="确认" cancelText="返回"/>
   </view>
-  <!--编辑栏-->
-  <ActionBar @tap.user="add" okText="确认" cancelText="返回"/>
-
 </template>
 
 <script>
@@ -24,6 +25,7 @@
   export default class TemplateList extends wepy.page {
     data = {
       templates: null,
+      init: false,
       template: {
         apps: null,
         codeTemplateInfo: null

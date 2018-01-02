@@ -40,7 +40,7 @@ export default class system extends base {
   }
 
   /***
-   * 更新应用
+   * 修改应用
    */
   static async updateLeApp(id, app) {
     const url = `${this.systemUrl}/leApp?id=${id}`;
