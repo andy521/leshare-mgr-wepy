@@ -44,6 +44,7 @@
   import ActionPanel from '../../components/common/action_panel';
   import Tips from '../../utils/Tips';
   import Event from '../../utils/Event';
+
   export default class EditUser extends wepy.page {
     def = {
       init: false,

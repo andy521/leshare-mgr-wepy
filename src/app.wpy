@@ -23,7 +23,7 @@
       });
       this.intercept('uploadFile', {
         config(p) {
-          p.header = this.createAuthHeader();
+          p.header = Object.assign(p.header, this.createAuthHeader());
           return p;
         },
         success(p) {

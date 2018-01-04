@@ -1,12 +1,12 @@
 <template>
   <Tips/>
   <!--照片上传区域-->
-  <ImageUploader :pictures.sync="pictures" otherClass="shop-swiper" top="260" maxSize="6" @toggle.user="toggle"/>
+  <ImageUploader class="{{mode == 'create' ? 'none' : ''}}" :pictures.sync="pictures" otherClass="shop-swiper" top="260" maxSize="6" @toggle.user="toggle"/>
 
   <view class="hr"></view>
 
   <!--店铺名称-->
-  <view class="name-box row-center">
+  <view wx:if="{{mode == 'edit'}}" class="name-box row-center">
     <image class="icon-xl" src="{{shop.avatar}}" @tap="avatar"/>
     <input class="shop-name" id="name" placeholder="请输入店铺名称" value="{{shop.name}}" bindinput="input"/>
   </view>
@@ -17,7 +17,7 @@
 
     <view class="weui-cell">
       <view class="weui-cell__bd">店铺分类</view>
-      <view class="weui-cell__ft" @tap="show">{{shop.categoryName}}</view>
+      <view class="weui-cell__ft category-box" @tap="show">{{shop.categoryName}}</view>
     </view>
 
     <view class="weui-cell weui-cell_switch">
@@ -54,9 +54,24 @@
         <view class="weui-cell__ft">{{shop.latitude ? '已选择(点击更换)' : '点击选择'}}</view>
       </view>
     </view>
+
+    <view class="weui-cell">
+      <view class="weui-cell__bd" style="min-width: 150rpx;">店铺管理员</view>
+      <view @tap.stop="user" style="min-width: 500rpx;">
+        <view class="weui-cell__ft"><image class="icon-lg" src="/images/icons/more-gray.png" @tap="admin"/></view>
+      </view>
+    </view>
+
   </view>
   <view class="mt10"></view>
   <view class="weui-cells weui-cells-form">
+
+    <view wx:if="{{mode == 'create'}}" class="weui-cell weui-cell_input">
+      <view class="weui-cell__hd">
+        <view class="weui-label">店铺名称</view>
+      </view>
+      <input class="weui-input" id="name" placeholder="请输入店铺名称" value="{{shop.name}}" bindinput="input"/>
+    </view>
 
     <view class="weui-cell weui-cell_input">
       <view class="weui-cell__hd">
@@ -75,7 +90,7 @@
         <view class="weui-label">联系电话</view>
       </view>
       <view class="weui-cell__bd">
-        <input class="weui-input" id="phone" bindinput="input" value="{{shop.phone}}" placeholder="请输入电话号码"/>
+        <input class="weui-input" id="phone" bindinput="input" value="{{shop.phone}}" placeholder="请输入电话号码" maxlength="11"/>
       </view>
       <view class="weui-cell__ft">
       </view>
@@ -83,7 +98,7 @@
 
     <view class="weui-cell">
       <view class="weui-cell__bd">店铺描述</view>
-      <view class="weui-cell__ft"></view>
+      <view class="weui-cell__ft">{{shop.describe}}</view>
     </view>
 
     <view class="weui-cell" wx:if="{{!uploader}}">
@@ -98,6 +113,7 @@
   <view class="zan-panel">
     <view class="zan-btns">
       <button class="zan-btn zan-btn--fill" @tap="save">保存</button>
+      <button wx:if="{{mode == 'edit'}}" class="zan-btn zan-btn--fill remove" @tap="remove({{shop.id}})">删除</button>
     </view>
   </view>
 
@@ -118,25 +134,39 @@
   import SliderSelector from '../../components/common/slider_selector';
   import Tips from '../../utils/Tips';
   import WxUtils from '../../utils/WxUtils';
+  import shop from '../../api/shop';
+  import Event from '../../utils/Event';
 
   export default class ShopEdit extends wepy.page {
     data = {
+      init: false,
       shop: {},
       pictures: [],
       categories: [],
       display: false,
-      uploader: false
+      uploader: false,
+      mode: 'create',
+      shopId: null
     };
 
-    async onLoad () {
-//      const [shops, categories] = await Promise.all([shop.info(), shop.getShopCategories()]);
-//      this.shop = shops;
-//      this.shop.autoOrder = this.shop.autoOrder == 1;
-//      this.shop.offPay = this.shop.offPay == 1;
-//      this.shop.inShop = this.shop.inShop == 1;
-//      this.shop.supportMember = this.shop.supportMember == 1;
-//      this.categories = categories;
-//      this.pictures = this.shop.images;
+    async onLoad (option) {
+      const {id, mode} = JSON.parse(option.param);
+      this.shopId = id;
+      this.mode = mode;
+      if (this.mode == 'edit') {
+        const [shops, categories] = await Promise.all([shop.shop(this.shopId), shop.getShopCategories()]);
+        this.shop = shops;
+        if (this.shop.categoryName == null) {
+          this.shop.categoryName = '请选择'
+        }
+        this.categories = categories;
+        this.shop.categoryName = this.categories
+          .find(item => item.id == this.shop.categoryId)
+          .name;
+        this.pictures = this.shop.images;
+      } else {
+        this.categories = await shop.getShopCategories();
+      }
       this.loaded();
     };
 
@@ -159,31 +189,35 @@
         this.shop[e.target.id] = e.detail.value;
       },
       async save () {
-        if (this.shop.address === '请选择店铺地址') {
-          this.tips('店铺地址不能为空');
+        if (!this.validate()) {
           return;
         }
-
-        const data = {
-          images: []
-        };
-        Tips.loading('保存中');
-        for (let picture of this.pictures) {
-          if (picture.url.substring(0, 6) == 'wxfile') {
-            const result = await shop.image(picture.url);
-            const image = JSON.parse(result);
-            data.images.push(image);
-          } else {
-            data.images.push(picture);
+        if (this.mode == 'create') {
+          this.shop.avatar = 'http://img.leshare.shop/leshare/logo.jpg';
+          await shop.addShop(this.shop);
+        } else {
+          const data = {
+            images: []
+          };
+          Tips.loading('保存中');
+          for (let picture of this.pictures) {
+            if (picture.url.substring(0, 11) == 'http://tmp/') {
+              const result = await shop.image(picture.url);
+              const image = JSON.parse(result);
+              data.images.push(image);
+            } else {
+              data.images.push(picture);
+            }
           }
+          this.shop.autoOrder = this.shop.autoOrder ? 1 : 0;
+          this.shop.offPay = this.shop.offPay ? 1 : 0;
+          this.shop.inShop = this.shop.inShop ? 1 : 0;
+          this.shop.supportMember = this.shop.supportMember ? 1 : 0;
+          this.shop.images = data.images;
+          await shop.updateShop(this.shop);
         }
-        this.shop.autoOrder = this.shop.autoOrder ? 1 : 0;
-        this.shop.offPay = this.shop.offPay ? 1 : 0;
-        this.shop.inShop = this.shop.inShop ? 1 : 0;
-        this.shop.supportMember = this.shop.supportMember ? 1 : 0;
-        this.shop.images = data.images;
-        await shop.updateShop(this.shop);
-        await Tips.success('更新成功！');
+        await Tips.success('保存成功！');
+        Event.emit(Event.SHOP_LIST_UPDATE);
         wepy.navigateBack();
       },
       show () {
@@ -191,6 +225,8 @@
       },
       change ({selectedId, selectedName}) {
         this.shop.categoryName = selectedName;
+        console.info(selectedId);
+        this.shop.categoryId = selectedId;
       },
       toggle (value) {
         this.uploader = value == 'true';
@@ -206,15 +242,62 @@
             return;
           }
           Tips.loading('上传中');
-//          const result = await shop.image(file[0]);
-//          console.info(result)
-//          const image = JSON.parse(result);
-//          this.shop.avatar = image.url;
+          const result = await shop.image(file[0], this.shop.id);
+          const image = JSON.parse(result);
+          this.shop.avatar = image.url;
           this.$apply();
         } finally {
           Tips.loaded();
         }
+      },
+      async remove(id) {
+        // 执行正常的流程
+        await Tips.confirm('确定要删除该模板吗？');
+        // 传第一步获取到的已选择的数组
+        await shop.deleteShop(id);
+        await Tips.success('删除成功');
+        Event.emit(Event.SHOP_LIST_UPDATE);
+        wepy.navigateBack();
+      },
+      admin() {
+        console.info('more')
       }
+    };
+    validate () {
+      const rules = [
+        {
+          value: this.shop.name,
+          method: 'required',
+          message: '用户名不能为空'
+        },
+        {
+          value: this.shop.name,
+          method: 'minlength',
+          param: 2,
+          message: '用户名长度过短'
+        },
+        {
+          value: this.shop.phone,
+          method: 'required',
+          message: '用户电话不能为空'
+        },
+        {
+          value: this.shop.phone,
+          method: 'tel',
+          message: '请输入正确的手机格式'
+        },
+        {
+          value: this.shop.address,
+          method: 'required',
+          message: '店铺地址不能为空'
+        },
+        {
+          value: this.shop.categoryName,
+          method: 'required',
+          message: '请选择店铺分类'
+        }
+      ];
+      return this.check(rules);
     };
     components = {
       Tips: FormTips,
@@ -223,7 +306,7 @@
     };
     mixins = [base, input];
     config = {
-      navigationBarTitleText: '修改店铺信息'
+      navigationBarTitleText: '编辑店铺信息'
     };
   }
 
@@ -231,6 +314,10 @@
 
 <style lang="scss">
   @import "../../styles/variable";
+
+  .none {
+    display: none;
+  }
 
   .shop-swiper {
     height: rpx(375);
@@ -252,5 +339,14 @@
       letter-spacing: 2px;
       flex-grow: 1;
     }
+  }
+
+  .category-box{
+    width: 30%;
+    height: 48rpx;
+  }
+
+  .remove{
+    background-color: red;
   }
 </style>

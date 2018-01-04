@@ -9,6 +9,8 @@ export default class Event {
   static SYSTEM_LEAPP_UPDATE = 'SYSTEM_LEAPP_UPDATE';
   // 用户列表更新事件
   static USER_LIST_UPDATE = 'USER_LIST_UPDATE';
+  // 店铺信息列表更新事件
+  static SHOP_LIST_UPDATE = 'SHOP_LIST_UPDATE';
   static listen(eventName, callback, observer) {
     WxNotificationCenter.addNotification(eventName, callback, observer);
   }

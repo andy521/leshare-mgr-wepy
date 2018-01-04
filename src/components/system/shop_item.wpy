@@ -1,0 +1,51 @@
+<template>
+  <view class="admin-box row" @tap="toShopEdit({{shop.id}})">
+    <image class="icon-xxl avatar mr20" src="{{shop.avatar ? shop.avatar : '/images/icons/customer.png'}}"/>
+    <view class="column" style="width: 70%">
+      <text class="lg">{{shop.name ? shop.name : '店铺名'}}</text>
+      <text class="xs muted shop-describe">简介：{{shop.describe ? shop.describe : '暂无介绍'}}</text>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy';
+  import Tips from '../../utils/Tips';
+  export default class shopAdminItem extends wepy.component {
+    props = {
+      shop: {}
+    };
+    methods = {
+      toShopEdit (shopId) {
+        this.$emit('toShopEdit', shopId);
+      },
+      phone () {
+        if (this.shop) {
+          wepy.makePhoneCall({phoneNumber: this.shop.phone});
+        } else {
+          Tips.alert('该用户没有电话');
+        }
+      }
+    }
+  }
+</script>
+<style lang="scss">
+  @import "../../styles/variable";
+
+  .admin-box {
+    background-color: white;
+    width: 100%;
+    min-height: rpx(140);
+    border-bottom: $border;
+    padding: rpx(30);
+    .avatar {
+      border-radius: 50%;
+      border: 2px solid $color-border;
+    }
+    .shop-describe{
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 500rpx;
+    }
+  }
+</style>

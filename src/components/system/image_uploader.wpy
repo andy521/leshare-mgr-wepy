@@ -1,6 +1,6 @@
 <template>
   <!-- 照片区域 -->
-  <view class="photo-box column-center" @tap="photo" wx:if="{{pictures.length < 1}}">
+  <view wx:if="{{mode == 'edit'}}" class="photo-box column-center" @tap="photo" wx:if="{{pictures.length < 1}}">
     <image class="photo-btn " src="/images/icons/camera.png"></image>
     <text class="mt10">{{title}}</text>
   </view>

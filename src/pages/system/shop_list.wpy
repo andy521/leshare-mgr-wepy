@@ -1,13 +1,9 @@
 <template>
   <view class="container" wx:if="{{init}}">
-    <!--<repeat for="{{page.list}}" key="index" index="index" item="item">-->
-      <!--<ShopItem :user.sync="item" @toEdit.user="toEdit"/>-->
-    <!--</repeat>-->
-    <view>
-      <image />
-      <view></view>
-    </view>
-    <ActionBar @tap.user="add" okText="新增用户"/>
+    <repeat for="{{page.list}}" key="index" index="index" item="item">
+      <ShopItem :shop.sync="item" @toShopEdit.user="toShopEdit"/>
+    </repeat>
+    <ActionBar @tap.user="add" okText="新增店铺"/>
     <!-- 加载提示 -->
     <Loadmore :page.sync="page"/>
     <!--占位符-->
@@ -19,20 +15,39 @@
   import wepy from 'wepy';
   import base from '../../mixins/base';
   import pagination from '../../mixins/pagination';
-  import ShopItem from '../../components/system/user_admin_item';
+  import ShopItem from '../../components/system/shop_item';
   import Placeholder from '../../components/common/placeholder';
   import Loadmore from '../../components/weui/loadmore';
   import ActionBar from '../../components/common/action_bar';
   import Event from '../../utils/Event';
-  import system from '../../api/system';
+  import shop from '../../api/shop';
 
   export default class ShopList extends wepy.page {
     data = {
-      page: []
+      page: [],
+      init: false
     };
     async onLoad () {
-      this.page = await system.getShopList();
+      this.page = await shop.getShopList();
+      this.next();
+      Event.listen(Event.SHOP_LIST_UPDATE, this.update.bind(this), this);
     }
+    methods = {
+      toShopEdit(id) {
+        const param = {
+          id: id,
+          mode: 'edit'
+        };
+        this.$navigate('shop_edit?param=' + JSON.stringify(param));
+      },
+      add() {
+        const param = {
+          id: null,
+          mode: 'create'
+        };
+        this.$navigate('shop_edit?param=' + JSON.stringify(param));
+      }
+    };
     components = {
       ShopItem: ShopItem,
       Placeholder: Placeholder,
