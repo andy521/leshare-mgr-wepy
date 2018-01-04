@@ -1,0 +1,59 @@
+<template>
+  add
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import shop from '../../api/shop';
+  import base from '../../mixins/base';
+  import pagination from '../../mixins/pagination';
+  import AdminItem from '../../components/system/user_admin_item';
+  import Placeholder from '../../components/common/placeholder';
+  import Loadmore from '../../components/weui/loadmore';
+  import ActionBar from '../../components/common/action_bar';
+  import Event from '../../utils/Event';
+
+  export default class AddShopAdmin extends wepy.page {
+    data = {
+      sellerIds: [],
+      page: {
+        list: []
+      }
+    };
+    async onLoad (option) {
+      const {id} = JSON.parse(option.param);
+      this.sellerIds = id;
+      this.page = shop.userList();
+      await this.next();
+    }
+//    computed = {
+//      sellers () {
+//        if (this.page.list == null) return;
+//        this.page.list.forEach(item => {
+//          item.isSelected = this.sellerIds.some(id => item.id == id);
+//        });
+//        return this.page.list;
+//      }
+//    };
+    watch = {
+      sellerIds(newValue, oldValue) {
+
+      }
+    };
+    components = {
+      AdminItem: AdminItem,
+      Placeholder: Placeholder,
+      Loadmore: Loadmore,
+      ActionBar: ActionBar
+    };
+    mixins = [base, pagination];
+    config = {
+      navigationBarTitleText: '新增店铺管理员',
+      enablePullDownRefresh: true
+    };
+  }
+</script>
+
+<style lang="scss">
+
+</style>

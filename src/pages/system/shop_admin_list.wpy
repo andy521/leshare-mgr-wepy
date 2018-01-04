@@ -1,0 +1,70 @@
+<template>
+  <view class="container" wx:if="{{init}}">
+    <repeat for="{{sellers}}" key="index" index="index" item="item">
+      <ShopAdminItem :seller.sync="item" @remove.user="remove"/>
+    </repeat>
+    <ActionBar @tap.user="add" okText="新增管理员"/>
+    <!-- 加载提示 -->
+    <Loadmore :page.sync="page"/>
+    <!--占位符-->
+    <Placeholder :show.sync="isPageEmpty" message="您还没有相关客户信息"/>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import base from '../../mixins/base';
+  import ShopAdminItem from '../../components/system/shop_admin_item';
+  import Placeholder from '../../components/common/placeholder';
+  import Loadmore from '../../components/weui/loadmore';
+  import ActionBar from '../../components/common/action_bar';
+  import Event from '../../utils/Event';
+  import shop from '../../api/shop';
+  import useradmin from '../../api/user_admin';
+
+  export default class ShopAdmin extends wepy.page {
+    data = {
+      init: false,
+      list: [],
+      sellers: [],
+      page: {
+        list: []
+      }
+    };
+    async onLoad(option) {
+      try {
+        const {id} = JSON.parse(option.param);
+        this.list = await shop.getShopAdminList(id);
+        this.sellers = this.list.map(item => item.seller);
+        this.$apply();
+      } finally {
+        this.loaded();
+      }
+    };
+    methods = {
+      remove(sellerId) {
+        console.info(sellerId)
+      },
+      add() {
+        const param = {
+          id: this.sellers.map(item => item.id)
+        };
+        this.$navigate('add_shop_admin?param=' + JSON.stringify(param));
+      }
+    };
+    components = {
+      ShopAdminItem: ShopAdminItem,
+      Placeholder: Placeholder,
+      Loadmore: Loadmore,
+      ActionBar: ActionBar
+    };
+    mixins = [base];
+    config = {
+      navigationBarTitleText: '店铺管理员'
+    };
+  }
+</script>
+
+<style lang="scss">
+
+</style>

@@ -71,8 +71,16 @@ export default class shop extends base {
   /***
    * 查询商铺管理员列表
    */
-  static async getShopAdmin(shopId) {
-    const url = `${this.systemUrl}//sellers/shop_rel?shop_id=${shopId}`;
+  static async getShopAdminList(shopId) {
+    const url = `${this.systemUrl}/sellers/shop_rel?shop_id=${shopId}`;
     return await this.get(url)
+  }
+
+  /**
+   * 系统查找所有卖家信息
+   **/
+  static userList () {
+    const url = `${this.systemUrl}/sellers`;
+    return new Page(url);
   }
 }

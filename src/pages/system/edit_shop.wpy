@@ -58,7 +58,7 @@
     <view class="weui-cell">
       <view class="weui-cell__bd" style="min-width: 150rpx;">店铺管理员</view>
       <view @tap.stop="user" style="min-width: 500rpx;">
-        <view class="weui-cell__ft"><image class="icon-lg" src="/images/icons/more-gray.png" @tap="admin"/></view>
+        <view class="weui-cell__ft"><image class="icon-lg" src="/images/icons/more-gray.png" @tap="admin({{shop.id}})"/></view>
       </view>
     </view>
 
@@ -137,9 +137,8 @@
   import shop from '../../api/shop';
   import Event from '../../utils/Event';
 
-  export default class ShopEdit extends wepy.page {
+  export default class EditShop extends wepy.page {
     data = {
-      init: false,
       shop: {},
       pictures: [],
       categories: [],
@@ -259,8 +258,15 @@
         Event.emit(Event.SHOP_LIST_UPDATE);
         wepy.navigateBack();
       },
-      admin() {
-        console.info('more')
+      admin(id) {
+        const param = {
+          id: id
+        };
+        if (this.mode == 'create') {
+          this.$navigate('add_shop_admin');
+        } else {
+          this.$navigate('shop_admin_list?param=' + JSON.stringify(param));
+        }
       }
     };
     validate () {

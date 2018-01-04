@@ -80,8 +80,10 @@
         'pages/system/system_leApp_audit',
         'pages/system/system_create_leApp',
         'pages/system/system_edit_leApp',
-        'pages/system/shop_edit',
-        'pages/system/shop_list'
+        'pages/system/edit_shop',
+        'pages/system/shop_list',
+        'pages/system/shop_admin_list',
+        'pages/system/add_shop_admin'
       ],
       window: {
         backgroundTextStyle: 'dark',

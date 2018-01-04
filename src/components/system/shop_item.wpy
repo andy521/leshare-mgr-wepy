@@ -36,10 +36,12 @@
     width: 100%;
     min-height: rpx(140);
     border-bottom: $border;
-    padding: rpx(30);
+    padding: 10rpx 50rpx;
     .avatar {
       border-radius: 50%;
       border: 2px solid $color-border;
+      width: 80rpx;
+      height: 80rpx;
     }
     .shop-describe{
       overflow: hidden;

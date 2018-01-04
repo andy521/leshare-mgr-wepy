@@ -38,14 +38,14 @@
           id: id,
           mode: 'edit'
         };
-        this.$navigate('shop_edit?param=' + JSON.stringify(param));
+        this.$navigate('edit_shop?param=' + JSON.stringify(param));
       },
       add() {
         const param = {
           id: null,
           mode: 'create'
         };
-        this.$navigate('shop_edit?param=' + JSON.stringify(param));
+        this.$navigate('edit_shop?param=' + JSON.stringify(param));
       }
     };
     components = {

@@ -1,0 +1,53 @@
+<template>
+  <view class="admin-box row">
+    <image class="icon-xxl avatar mr20" src="{{seller.avatar ? seller.avatar : '/images/icons/customer.png'}}"/>
+    <view class="row-between" style="width: 70%">
+      <view class="column">
+        <text class="lg">{{seller.name ? seller.name : '管理员'}}</text>
+        <text class="xs muted">电话：{{seller.phone ? seller.phone : '暂无电话'}}</text></view>
+      <view class="row">
+        <image class="icon mr20" src="/images/icons/call.png" @tap.stop="phone"/>
+        <button class="zan-btn--mini zan-btn zan-btn--danger" @tap.stop="remove({{seller.id}})">删除</button>
+      </view>
+
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy';
+  import Tips from '../../utils/Tips';
+  export default class ShopUserAdminItem extends wepy.component {
+    props = {
+      seller: {}
+    };
+    methods = {
+      phone () {
+        if (this.seller) {
+          wepy.makePhoneCall({phoneNumber: this.seller.phone});
+        } else {
+          Tips.alert('该用户没有电话');
+        }
+      },
+      remove(sellerId) {
+        this.$emit('remove', sellerId)
+      }
+    }
+  }
+</script>
+<style lang="scss">
+  @import "../../styles/variable";
+
+  .admin-box {
+    background-color: white;
+    width: 100%;
+    min-height: rpx(140);
+    border-bottom: $border;
+    padding: 0rpx 50rpx;
+    .avatar {
+      border-radius: 50%;
+      border: 2px solid $color-border;
+      width: 80rpx;
+      height:80rpx;
+    }
+  }
+</style>
