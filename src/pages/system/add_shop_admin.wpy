@@ -1,5 +1,13 @@
 <template>
-  add
+  <view class="container" wx:if="{{init}}">
+    <repeat for="{{sellers}}" key="index" index="index" item="item">
+      <AddShopAdminItem :seller.sync="item" @add.user="add"/>
+    </repeat>
+    <!-- 加载提示 -->
+    <Loadmore :page.sync="page"/>
+    <!--占位符-->
+    <Placeholder :show.sync="isPageEmpty" message="您还没有相关管理员信息"/>
+  </view>
 </template>
 
 <script>
@@ -7,41 +15,65 @@
   import shop from '../../api/shop';
   import base from '../../mixins/base';
   import pagination from '../../mixins/pagination';
-  import AdminItem from '../../components/system/user_admin_item';
+  import AddShopAdminItem from '../../components/system/add_shop_admin_item';
   import Placeholder from '../../components/common/placeholder';
   import Loadmore from '../../components/weui/loadmore';
   import ActionBar from '../../components/common/action_bar';
   import Event from '../../utils/Event';
+  import Tips from '../../utils/Tips';
 
   export default class AddShopAdmin extends wepy.page {
     data = {
+      init: false,
       sellerIds: [],
+      shopId: null,
+      shopName: null,
       page: {
         list: []
-      }
+      },
+      isPageEmpty: true
     };
     async onLoad (option) {
-      const {id} = JSON.parse(option.param);
-      this.sellerIds = id;
+      const {sellerIds, shopId, shopName} = JSON.parse(option.param);
+      this.sellerIds = sellerIds;
+      this.shopId = shopId;
+      this.shopName = shopName;
       this.page = shop.userList();
+      this.isPageEmpty = this.page.list.length < 1;
       await this.next();
-    }
-//    computed = {
-//      sellers () {
-//        if (this.page.list == null) return;
-//        this.page.list.forEach(item => {
-//          item.isSelected = this.sellerIds.some(id => item.id == id);
-//        });
-//        return this.page.list;
-//      }
-//    };
-    watch = {
-      sellerIds(newValue, oldValue) {
-
+    };
+    methods = {
+      async add (seller) {
+        const param = {
+          avatar: seller.avatar,
+          seller: seller,
+          sellerId: seller.id,
+          shopId: this.shopId,
+          shopName: this.shopName
+        };
+        await shop.addShopAdmin(param);
+        await Tips.success('新增成功！');
+        Event.emit(Event.SHOP_ADMIN_LIST_UPDATE);
+        Event.emit(Event.EDIT_SHOP_UPDATE);
+        wepy.navigateBack();
       }
     };
+    computed = {
+      sellers () {
+        if (this.page.list == null) return;
+        this.page.list.forEach(item => {
+          item.isSelected = this.sellerIds.some(id => item.id == id);
+        });
+        return this.page.list;
+      }
+    };
+//    watch = {
+//      sellers(newValue, oldValue) {
+//        console.info(this.sellerIds)
+//      }
+//    };
     components = {
-      AdminItem: AdminItem,
+      AddShopAdminItem: AddShopAdminItem,
       Placeholder: Placeholder,
       Loadmore: Loadmore,
       ActionBar: ActionBar

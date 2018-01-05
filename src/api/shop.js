@@ -83,4 +83,20 @@ export default class shop extends base {
     const url = `${this.systemUrl}/sellers`;
     return new Page(url);
   }
+
+  /***
+   * 增加店铺管理员
+   */
+  static async addShopAdmin (param) {
+    const url = `${this.systemUrl}/sellers/rel`;
+    return await this.post(url, param);
+  }
+
+  /***
+   * 删除店铺管理员
+   */
+  static async deleteShopAdmin (sellerId, shopId) {
+    const url = `${this.systemUrl}/sellers/rel?seller_id=${sellerId}&shop_id=${shopId}`;
+    return await this.delete(url)
+  }
 }

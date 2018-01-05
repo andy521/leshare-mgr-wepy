@@ -11,6 +11,10 @@ export default class Event {
   static USER_LIST_UPDATE = 'USER_LIST_UPDATE';
   // 店铺信息列表更新事件
   static SHOP_LIST_UPDATE = 'SHOP_LIST_UPDATE';
+  // 店铺管理员信息列表更新事件
+  static SHOP_ADMIN_LIST_UPDATE = 'SHOP_ADMIN_LIST_UPDATE';
+  // 店铺编辑页面更新事件
+  static EDIT_SHOP_UPDATE = 'EDIT_SHOP_UPDATE';
   static listen(eventName, callback, observer) {
     WxNotificationCenter.addNotification(eventName, callback, observer);
   }

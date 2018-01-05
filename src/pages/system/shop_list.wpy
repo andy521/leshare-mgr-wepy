@@ -25,10 +25,12 @@
   export default class ShopList extends wepy.page {
     data = {
       page: [],
-      init: false
+      init: false,
+      isPageEmpty: true
     };
     async onLoad () {
       this.page = await shop.getShopList();
+      this.isPageEmpty = this.page.list.length < 1;
       this.next();
       Event.listen(Event.SHOP_LIST_UPDATE, this.update.bind(this), this);
     }

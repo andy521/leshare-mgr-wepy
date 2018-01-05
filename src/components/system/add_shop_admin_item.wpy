@@ -4,19 +4,19 @@
     <view class="row-between" style="width: 70%">
       <view class="column">
         <text class="lg">{{seller.name ? seller.name : '管理员'}}</text>
-        <text class="xs muted">电话：{{seller.phone ? seller.phone : '暂无电话'}}</text></view>
-      <view class="row">
-        <image class="icon mr20" src="/images/icons/call.png" @tap.stop="phone"/>
-        <button class="zan-btn--small zan-btn zan-btn--danger" @tap.stop="remove({{seller.id}})">删除</button>
+        <text class="xs muted">电话：{{seller.phone ? seller.phone : '暂无电话'}}</text>
       </view>
-
+      <view class="row">
+        <button wx:if="{{!seller.isSelected}}" class="zan-btn--small zan-btn zan-btn--primary" @tap.stop="add({{seller}})">添加</button>
+        <button wx:else class="zan-btn--small zan-btn zan-btn--disabled">已添加</button>
+      </view>
     </view>
   </view>
 </template>
 <script>
   import wepy from 'wepy';
   import Tips from '../../utils/Tips';
-  export default class ShopUserAdminItem extends wepy.component {
+  export default class AddShopUserAdminItem extends wepy.component {
     props = {
       seller: {}
     };
@@ -28,8 +28,8 @@
           Tips.alert('该用户没有电话');
         }
       },
-      remove(sellerId) {
-        this.$emit('remove', sellerId)
+      add(sellerId) {
+        this.$emit('add', sellerId)
       }
     }
   }

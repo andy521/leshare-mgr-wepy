@@ -7,7 +7,7 @@
     <!-- 加载提示 -->
     <Loadmore :page.sync="page"/>
     <!--占位符-->
-    <Placeholder :show.sync="isPageEmpty" message="您还没有相关客户信息"/>
+    <Placeholder :show.sync="isPageEmpty" message="您还没有相关管理员信息"/>
   </view>
 </template>
 
@@ -20,7 +20,7 @@
   import ActionBar from '../../components/common/action_bar';
   import Event from '../../utils/Event';
   import shop from '../../api/shop';
-  import useradmin from '../../api/user_admin';
+  import Tips from '../../utils/Tips';
 
   export default class ShopAdmin extends wepy.page {
     data = {
@@ -29,25 +29,43 @@
       sellers: [],
       page: {
         list: []
-      }
+      },
+      shopId: null,
+      shopName: null,
+      isPageEmpty: true
     };
     async onLoad(option) {
       try {
-        const {id} = JSON.parse(option.param);
-        this.list = await shop.getShopAdminList(id);
-        this.sellers = this.list.map(item => item.seller);
-        this.$apply();
+        const {id, name} = JSON.parse(option.param);
+        this.shopId = id;
+        this.shopName = name;
+        this.doLoad();
       } finally {
         this.loaded();
       }
+      Event.listen(Event.SHOP_ADMIN_LIST_UPDATE, this.doLoad.bind(this), this);
     };
+    async doLoad () {
+      this.list = await shop.getShopAdminList(this.shopId);
+      if (this.list != null && this.list != 'null') {
+        this.sellers = this.list.map(item => item.seller);
+        this.isPageEmpty = this.sellers.length < 1;
+      }
+      this.$apply();
+    }
     methods = {
-      remove(sellerId) {
-        console.info(sellerId)
+      async remove(sellerId) {
+        await shop.deleteShopAdmin(sellerId, this.shopId);
+        await Tips.success('删除成功！');
+        Event.emit(Event.SHOP_ADMIN_LIST_UPDATE);
+        Event.emit(Event.EDIT_SHOP_UPDATE);
+        this.$apply();
       },
       add() {
         const param = {
-          id: this.sellers.map(item => item.id)
+          sellerIds: this.sellers.map(item => item.id),
+          shopId: this.shopId,
+          shopName: this.shopName
         };
         this.$navigate('add_shop_admin?param=' + JSON.stringify(param));
       }
