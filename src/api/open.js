@@ -58,8 +58,8 @@ export default class open extends base {
   /***
    * 查询系统管理
    */
-  static manageSystem () {
-    const url = `${this.openUrl}/users`;
+  static manageSystem (type) {
+    const url = `${this.openUrl}/users?type=${type}`;
     return new Page(url, this.processManageSystemItem.bind(this));
   }
   static processManageSystemItem(item) {

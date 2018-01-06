@@ -50,7 +50,7 @@
       actionSheetHidden: true
     };
     async onLoad () {
-      this.page = await open.manageSystem();
+      this.page = await open.manageSystem(this.key);
       this.next();
     };
     params() {

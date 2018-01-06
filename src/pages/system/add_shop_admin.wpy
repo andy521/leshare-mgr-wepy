@@ -67,11 +67,6 @@
         return this.page.list;
       }
     };
-//    watch = {
-//      sellers(newValue, oldValue) {
-//        console.info(this.sellerIds)
-//      }
-//    };
     components = {
       AddShopAdminItem: AddShopAdminItem,
       Placeholder: Placeholder,

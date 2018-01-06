@@ -55,6 +55,7 @@
     }
     methods = {
       async remove(sellerId) {
+        await Tips.confirm('确定要删除该店铺管理员信息吗？');
         await shop.deleteShopAdmin(sellerId, this.shopId);
         await Tips.success('删除成功！');
         Event.emit(Event.SHOP_ADMIN_LIST_UPDATE);
