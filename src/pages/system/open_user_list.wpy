@@ -51,9 +51,6 @@
     };
     async onLoad () {
       this.page = await open.manageSystem();
-      this.page.list.filter(item => {
-        item.type = this.key
-      });
       this.next();
     };
     params() {

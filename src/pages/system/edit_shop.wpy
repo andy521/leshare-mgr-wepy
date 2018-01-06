@@ -162,7 +162,19 @@
       this.shopId = id;
       this.mode = mode;
       if (this.mode == 'edit') {
-        this.doLoad()
+        const [shops, categories, sellers] = await Promise.all([shop.shop(this.shopId), shop.getShopCategories(), shop.getShopAdminList(this.shopId)]);
+        this.shop = shops;
+        this.sellers = sellers == null ? [] : sellers;
+        if (this.shop.categoryName == null) {
+          this.shop.categoryName = '请选择'
+        }
+        if (this.shop.describe == null) {
+          this.shop.describe = ''
+        }
+        this.categories = categories;
+        this.shop.categoryName = this.categories
+          .find(item => item.id == this.shop.categoryId).name;
+        this.pictures = this.shop.images;
       } else {
         this.categories = await shop.getShopCategories();
       }
@@ -170,17 +182,8 @@
       Event.listen(Event.EDIT_SHOP_UPDATE, this.doLoad.bind(this), this);
     };
     async doLoad () {
-      const [shops, categories, sellers] = await Promise.all([shop.shop(this.shopId), shop.getShopCategories(), shop.getShopAdminList(this.shopId)]);
-      this.shop = shops;
+      const sellers = await shop.getShopAdminList(this.shopId);
       this.sellers = sellers == null ? [] : sellers;
-      if (this.shop.categoryName == null) {
-        this.shop.categoryName = '请选择'
-      }
-      this.categories = categories;
-      this.shop.categoryName = this.categories
-        .find(item => item.id == this.shop.categoryId)
-        .name;
-      this.pictures = this.shop.images;
       this.$apply();
     };
     methods = {
@@ -285,18 +288,18 @@
         {
           value: this.shop.name,
           method: 'required',
-          message: '用户名不能为空'
+          message: '店铺名不能为空'
         },
         {
           value: this.shop.name,
           method: 'minlength',
           param: 2,
-          message: '用户名长度过短'
+          message: '店铺名长度过短'
         },
         {
           value: this.shop.phone,
           method: 'required',
-          message: '用户电话不能为空'
+          message: '店铺电话不能为空'
         },
         {
           value: this.shop.phone,
