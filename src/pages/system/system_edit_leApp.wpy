@@ -2,34 +2,7 @@
   <Tips/>
   <view class="container" wx:if="{{init}}">
     <form bindsubmit="createLeApp" class="weui-cells-form creates-box">
-      <view class="weui-cell weui-cell_input create-box">
-        <view class="weui-cell__hd">
-          <view class="weui-label">区域</view>
-        </view>
-        <view class="weui-cell__bd">
-          <input class="weui-input" placeholder="请输入六位数字" id="leArea" @input="input" value="{{input.leArea}}"
-                 type="number" maxlength="6"/>
-        </view>
-      </view>
-      <view class="weui-cell weui-cell_input create-box">
-        <view class="weui-cell__hd">
-          <view class="weui-label">应用程序模板</view>
-        </view>
-        <view class="weui-cell__bd">
-          <input class="weui-input" placeholder="请输入应用程序模板" id="appTemplate" @input="input"
-                 value="{{input.appTemplate}}"
-                 type="number"/>
-        </view>
-      </view>
-      <view class="weui-cell weui-cell_input create-box">
-        <view class="weui-cell__hd">
-          <view class="weui-label">店铺类型</view>
-        </view>
-        <view class="weui-cell__bd">
-          <input class="weui-input" placeholder="请输入店铺类型字" id="shopType" @input="input" value="{{input.shopType}}"
-                 type="number"/>
-        </view>
-      </view>
+
       <view class=" weui-cell weui-cell_input create-box">
         <view class="weui-cell__hd">
           <view class="weui-label">应用名称</view>
@@ -38,6 +11,40 @@
           <input class="weui-input" placeholder="请输入应用名称" id="appName" @input="input" value="{{input.appName}}"/>
         </view>
       </view>
+
+      <!--TODO 需要改为下拉框-->
+      <view class="weui-cell weui-cell_input create-box">
+        <view class="weui-cell__hd">
+          <view class="weui-label">程序模板</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input class="weui-input" placeholder="请输入应用程序模板" id="appTemplate" @input="input"
+                 value="{{input.appTemplate}}"
+                 type="number"/>
+        </view>
+      </view>
+
+      <!--TODO 需要改为选择框-->
+      <view class="weui-cell weui-cell_input create-box">
+        <view class="weui-cell__hd">
+          <view class="weui-label">店铺类型</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input class="weui-input" placeholder="请输入店铺类型" id="shopType" @input="input" value="{{input.shopType}}"
+                 type="number"/>
+        </view>
+      </view>
+
+      <view class="weui-cell weui-cell_input create-box">
+        <view class="weui-cell__hd">
+          <view class="weui-label">地区</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input class="weui-input" placeholder="请输入六位数字" id="leArea" @input="input" value="{{input.leArea}}"
+                 type="number" maxlength="6"/>
+        </view>
+      </view>
+
       <view class="weui-cell weui-cell_input create-box">
         <view class="weui-cell__hd">
           <view class="weui-label">备注</view>

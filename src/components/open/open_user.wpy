@@ -16,8 +16,8 @@
     </view>
     <view class="line"></view>
     <view class="row-end zan-box">
-      <view class="zan-btn zan-btn--small ml20" @tap="check({{system.id}})">查看详情</view>
-      <view class="zan-btn zan-btn--small zan-btn--primary ml20">创建应用</view>
+      <view class="zan-btn zan-btn--small ml20" @tap="check({{system}})">查看详情</view>
+      <view class="zan-btn zan-btn--small zan-btn--primary ml20"  @tap="create({{system}})">创建应用</view>
     </view>
   </view>
 </template>
@@ -30,8 +30,11 @@
       system: {}
     };
     methods = {
-      async check (id) {
-        this.$emit('check', id);
+      check (system) {
+        this.$emit('detail', system);
+      },
+      create (system) {
+        this.$emit('create', system);
       }
     }
   }

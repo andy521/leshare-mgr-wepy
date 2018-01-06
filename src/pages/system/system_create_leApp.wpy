@@ -4,7 +4,7 @@
     <form bindsubmit="createLeApp" class="weui-cells-form creates-box">
       <view class="weui-cell weui-cell_input create-box">
         <view class="weui-cell__hd">
-          <view class="weui-label">wxAppid</view>
+          <view class="weui-label">AppId</view>
         </view>
         <view class="weui-cell__bd">
           <input class="weui-input" placeholder="请输入wxAppid" id="wxAppid" @input="input" value="{{input.wxAppid}}"/>
@@ -12,19 +12,10 @@
       </view>
       <view class="weui-cell weui-cell_input create-box">
         <view class="weui-cell__hd">
-          <view class="weui-label">wxSecret</view>
+          <view class="weui-label">Secret</view>
         </view>
         <view class="weui-cell__bd">
           <input class="weui-input" placeholder="请输入wxSecret" id="wxSecret" @input="input" value="{{input.wxSecret}}"/>
-        </view>
-      </view>
-      <view class="weui-cell weui-cell_input create-box">
-        <view class="weui-cell__hd">
-          <view class="weui-label">区域</view>
-        </view>
-        <view class="weui-cell__bd">
-          <input class="weui-input" placeholder="请输入六位数字" id="leArea" @input="input" value="{{input.leArea}}"
-                 type="number" maxlength="6"/>
         </view>
       </view>
       <view class=" weui-cell weui-cell_input create-box">
@@ -37,20 +28,30 @@
       </view>
       <view class="weui-cell weui-cell_input create-box">
         <view class="weui-cell__hd">
+          <view class="weui-label">地区</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input class="weui-input" placeholder="请输入六位数字" id="leArea" @input="input" value="{{input.leArea}}"
+                 type="number" maxlength="6"/>
+        </view>
+      </view>
+      <view class="weui-cell weui-cell_input create-box">
+        <view class="weui-cell__hd">
           <view class="weui-label">备注</view>
         </view>
         <view class="weui-cell__bd">
           <input class="weui-input" placeholder="请输入备注" id="remark" @input="input" value="{{input.remark}}"/>
         </view>
       </view>
-      <view class="weui-cell weui-cell_input create-box">
-        <view class="weui-cell__hd">
-          <view class="weui-label">审核查询</view>
-        </view>
-        <view class="weui-cell__bd">
-          <input class="weui-input" placeholder="请输入审核查询" id="auditInfo" @input="input" value="{{input.auditInfo}}"/>
-        </view>
-      </view>
+
+      <!--<view class="weui-cell weui-cell_input create-box">-->
+        <!--<view class="weui-cell__hd">-->
+          <!--<view class="weui-label">审核内容</view>-->
+        <!--</view>-->
+        <!--<view class="weui-cell__bd">-->
+          <!--<input class="weui-input" placeholder="请输入审核内容" id="auditInfo" @input="input" value="{{input.auditInfo}}"/>-->
+        <!--</view>-->
+      <!--</view>-->
       <view class="zan-panel">
         <view class="zan-btns">
           <button class="zan-btn zan-btn--fill" type="primary" form-type="submit">创建</button>
@@ -74,7 +75,15 @@
     data = {
       init: false
     };
-    onLoad() {
+    onLoad(option, {preload}) {
+      const system = preload.param;
+      this.input.leArea = 350500; // TODO 列出福建地区
+      if (system != null) {
+        console.info(system);
+        this.input.wxAppid = system.app_id;
+        this.input.appName = system.nick_name;
+        this.input.remark = system.principal_name;
+      }
       this.loaded();
     };
     methods = {
@@ -106,12 +115,7 @@
         {
           value: this.input.wxAppid,
           method: 'required',
-          message: 'wxAppid不能为空'
-        },
-        {
-          value: this.input.wxSecret,
-          method: 'required',
-          message: 'wxSecret不能为空'
+          message: 'AppId不能为空'
         },
         {
           value: this.input.leArea,

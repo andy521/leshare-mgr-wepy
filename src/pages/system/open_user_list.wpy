@@ -14,7 +14,7 @@
     </view>
     <view class="box"></view>
     <repeat for="{{page.list}}" key="index" index="index" item="item">
-      <OpenUser :system.sync="item" @check.user="check"/>
+      <OpenUser :system.sync="item" @detail.user="detail" @create.user="create"/>
     </repeat>
     <!--占位符-->
     <Placeholder :show.sync="empty" />
@@ -59,10 +59,13 @@
       };
     };
     methods = {
-      check(id) {
-        const system = this.page.list.find(item => item.id == id);
+      detail(system) {
         this.$preload('param', system);
         this.$navigate('system_user_detail');
+      },
+      create (system) {
+        this.$preload('param', system);
+        this.$navigate('system_create_leApp');
       },
       async typeChange(e) {
         this.key = this.type[e.detail.value].key;
