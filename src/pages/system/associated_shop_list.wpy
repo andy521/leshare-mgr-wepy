@@ -1,0 +1,70 @@
+<template>
+  <view class="container" wx:if="{{init}}">
+    <repeat for="{{shops}}" key="index" index="index" item="item">
+      <AssociatedShopItem :shop.sync="item" @add.user="add"/>
+    </repeat>
+    <!-- 加载提示 -->
+    <Loadmore :page.sync="page"/>
+    <!--占位符-->
+    <Placeholder :show.sync="isPageEmpty" message="您还没有相关店铺信息"/>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import shop from '../../api/shop';
+  import base from '../../mixins/base';
+  import pagination from '../../mixins/pagination';
+  import AssociatedShopItem from '../../components/system/associated_shop_item';
+  import Placeholder from '../../components/common/placeholder';
+  import Loadmore from '../../components/weui/loadmore';
+  import Event from '../../utils/Event';
+//  import Tips from '../../utils/Tips';
+
+  export default class AssociatedShopList extends wepy.page {
+    data = {
+      page: {
+        list: []
+      },
+      shops: [],
+      shopId: 0,
+      init: false,
+      isPageEmpty: true
+    };
+    async onLoad (option) {
+      this.page = await shop.getShopList();
+      this.shopId = option.shopId;
+      this.isPageEmpty = this.page.list.length < 1;
+      this.next();
+    }
+    methods = {
+      async add (shop) {
+        Event.emit(Event.ASSOCIATED_SHOP_LIST, shop);
+        wepy.navigateBack();
+      }
+    };
+    computed = {
+      shops () {
+        if (this.page.list == null) return;
+        this.page.list.forEach(item => {
+          item.isSelected = item.id == this.shopId;
+        });
+        return this.page.list;
+      }
+    };
+    components = {
+      AssociatedShopItem: AssociatedShopItem,
+      Placeholder: Placeholder,
+      Loadmore: Loadmore
+    };
+    mixins = [base, pagination];
+    config = {
+      navigationBarTitleText: '新增关联店铺',
+      enablePullDownRefresh: true
+    };
+  }
+</script>
+
+<style lang="scss">
+
+</style>
