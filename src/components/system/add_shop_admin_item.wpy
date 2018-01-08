@@ -6,7 +6,7 @@
         <text class="lg">{{seller.name ? seller.name : '管理员'}}</text>
         <text class="xs muted">电话：{{seller.phone ? seller.phone : '暂无电话'}}</text>
       </view>
-      <view class="row">
+      <view>
         <button wx:if="{{!seller.isSelected}}" class="zan-btn--small zan-btn zan-btn--primary" @tap.stop="add({{seller}})">添加</button>
         <button wx:else class="zan-btn--small zan-btn zan-btn--disabled">已添加</button>
       </view>

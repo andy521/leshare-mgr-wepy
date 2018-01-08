@@ -15,6 +15,8 @@ export default class Event {
   static SHOP_ADMIN_LIST_UPDATE = 'SHOP_ADMIN_LIST_UPDATE';
   // 店铺编辑页面更新事件
   static EDIT_SHOP_UPDATE = 'EDIT_SHOP_UPDATE';
+  // 应用管理页面关联店铺刷新事件
+  static ASSOCIATED_SHOP_LIST = 'ASSOCIATED_SHOP_LIST';
   static listen(eventName, callback, observer) {
     WxNotificationCenter.addNotification(eventName, callback, observer);
   }

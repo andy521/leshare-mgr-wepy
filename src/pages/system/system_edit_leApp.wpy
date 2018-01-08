@@ -13,27 +13,36 @@
       </view>
 
       <!--TODO 需要改为下拉框-->
-      <view class="weui-cell weui-cell_input create-box">
-        <view class="weui-cell__hd">
+      <view class="weui-cell weui-cell_select type-box">
+        <view class="weui-cell__hd weui-cell__hd_in-select-after">
           <view class="weui-label">程序模板</view>
         </view>
         <view class="weui-cell__bd">
-          <input class="weui-input" placeholder="请输入应用程序模板" id="appTemplate" @input="input"
-                 value="{{input.appTemplate}}"
-                 type="number"/>
+          <picker bindchange="templateTypeChange" value="{{templateTypeIndex}}" range="{{templateType}}" range-key="{{'name'}}">
+            <view class="weui-select weui-select_in-select-after">{{templateType[templateTypeIndex].name}}</view>
+          </picker>
         </view>
       </view>
 
       <!--TODO 需要改为选择框-->
-      <view class="weui-cell weui-cell_input create-box">
-        <view class="weui-cell__hd">
+      <view class="weui-cell weui-cell_select type-box">
+        <view class="weui-cell__hd weui-cell__hd_in-select-after">
           <view class="weui-label">店铺类型</view>
         </view>
         <view class="weui-cell__bd">
-          <input class="weui-input" placeholder="请输入店铺类型" id="shopType" @input="input" value="{{input.shopType}}"
-                 type="number"/>
+          <picker bindchange="shopTypeChange" value="{{shopTypeIndex}}" range="{{shopType}}" range-key="{{'name'}}">
+            <view class="weui-select weui-select_in-select-after">{{shopType[shopTypeIndex].name}}</view>
+          </picker>
         </view>
       </view>
+
+      <view class="weui-cell">
+        <view class="weui-cell__bd" style="min-width: 150rpx;">关联店铺</view>
+        <view @tap.stop="associated({{input.shopId}})" style="min-width: 500rpx;">
+          <view class="weui-cell__ft weui-cell__ft_in-access">{{input.shopId == '0' || input.shopId == null ? '未选择' : '已选择'}}</view>
+        </view>
+      </view>
+
 
       <view class="weui-cell weui-cell_input create-box">
         <view class="weui-cell__hd">
@@ -65,7 +74,7 @@
 <script>
   import wepy from 'wepy';
   import ActionBar from '../../components/common/action_bar';
-  import system from '../../api/system';
+  import system from '../../api/system'
   import base from '../../mixins/base';
   import input from '../../mixins/input';
   import Event from '../../utils/Event';
@@ -75,12 +84,55 @@
   export default class EditLeApp extends wepy.page {
     data = {
       id: null,
-      init: false
+      init: false,
+      page: [],
+      templateType: [
+        {
+          id: 1,
+          key: '0',
+          name: '餐饮'
+        },
+        {
+          id: 2,
+          key: '1',
+          name: '商城'
+        },
+        {
+          id: 3,
+          key: '2',
+          name: '助手'
+        }
+      ],
+      shopType: [
+        {
+          id: 1,
+          key: '0',
+          name: '商城'
+        },
+        {
+          id: 2,
+          key: '1',
+          name: '外卖'
+        }
+      ],
+      templateKey: '0',
+      shopKey: '0',
+      templateTypeIndex: 0,
+      shopTypeIndex: 0
     };
-    onLoad(options, {preload}) {
+    async onLoad(options, {preload}) {
       this.input = preload.param;
       this.id = this.input.id;
+      this.templateTypeIndex = this.input.appTemplate - 1;
+      this.shopTypeIndex = this.input.shopType - 1;
+      this.templateKey = this.input.appTemplate - 1;
+      this.shopKey = this.input.shopType - 1;
       this.loaded();
+      Event.listen(Event.ASSOCIATED_SHOP_LIST, this.doLoad.bind(this), this);
+    };
+    doLoad(shop) {
+      this.input.shopId = shop.shopId;
+      this.input.shopName = shop.shopName;
     }
     methods = {
       async createLeApp () {
@@ -94,7 +146,8 @@
             shopType: this.input.shopType,
             appName: this.input.appName,
             remark: this.input.remark,
-            id: this.input.id
+            id: this.input.id,
+            shopId: this.input.shopId
           };
           await system.updateLeApp(this.id, param);
           await Tips.success('编辑成功！');
@@ -103,6 +156,19 @@
           this.loaded();
         }
         wepy.navigateBack();
+      },
+      templateTypeChange(e) {
+        this.templateKey = this.templateType[e.detail.value].key;
+        this.templateTypeIndex = e.detail.value;
+        this.input.appTemplate = this.templateKey * 1 + 1;
+      },
+      shopTypeChange(e) {
+        this.shopKey = this.shopType[e.detail.value].key;
+        this.shopTypeIndex = e.detail.value;
+        this.input.shopType = this.shopKey * 1 + 1;
+      },
+      associated(shopId) {
+        this.$navigate('associated_shop_list?shopId=' + shopId);
       }
     };
     validate () {

@@ -1,0 +1,55 @@
+<template>
+  <view class="admin-box row" >
+    <image class="icon-xxl avatar mr20" src="{{shop.avatar ? shop.avatar : '/images/icons/customer.png'}}"/>
+    <view class="column" style="width: 55%">
+      <text class="lg">{{shop.name ? shop.name : '店铺名'}}</text>
+      <text class="xs muted shop-describe">简介：{{shop.describe ? shop.describe : '暂无介绍'}}</text>
+    </view>
+    <view>
+      <button wx:if="{{!shop.isSelected}}" class="zan-btn--small zan-btn zan-btn--primary" @tap="add({{shop.id}})">添加</button>
+      <button wx:else class="zan-btn--small zan-btn zan-btn--disabled">已添加</button>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+
+  export default class AssociatedshopItem extends wepy.component {
+    props = {
+      shop: {}
+    };
+    methods = {
+      add(shopId) {
+        const param = {
+          shopId: shopId,
+          shopName: this.shop.name
+        };
+        this.$emit('add', param)
+      }
+    }
+  }
+</script>
+<style lang="scss">
+  @import "../../styles/variable";
+
+  .admin-box {
+    background-color: white;
+    width: 100%;
+    min-height: rpx(140);
+    border-bottom: $border;
+    padding: 10rpx 50rpx;
+    .avatar {
+      border-radius: 50%;
+      border: 2px solid $color-border;
+      width: 80rpx;
+      height: 80rpx;
+    }
+    .shop-describe{
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 350rpx;
+    }
+  }
+</style>

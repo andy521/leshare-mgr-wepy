@@ -19,7 +19,7 @@
 
       <view class="weui-cell">
         <view class="weui-cell__bd">店铺分类</view>
-        <view class="weui-cell__ft category-box" @tap="show">{{shop.categoryName}}</view>
+        <view class="weui-cell__ft category-box" @tap="show">{{shop.categoryName == null ? '请选择' : shop.categoryName}}</view>
       </view>
 
       <view class="weui-cell weui-cell_switch">
@@ -60,9 +60,7 @@
       <view class="weui-cell {{mode == 'create' ? 'none' : ''}}">
         <view class="weui-cell__bd" style="min-width: 150rpx;">店铺管理员</view>
         <view @tap="admin({{shop.id}})" style="min-width: 500rpx;">
-          <view class="weui-cell__ft">已有{{sellers.length}}位管理员
-            <image class="icon-lg" src="/images/icons/more-gray.png"/>
-          </view>
+          <view class="weui-cell__ft weui-cell__ft_in-access">已有{{sellers.length}}位管理员</view>
         </view>
       </view>
 
@@ -103,7 +101,6 @@
 
       <view class="weui-cell">
         <view class="weui-cell__bd">店铺描述</view>
-        <view class="weui-cell__ft">{{shop.describe}}</view>
       </view>
 
       <view class="weui-cell" wx:if="{{!uploader}}">
