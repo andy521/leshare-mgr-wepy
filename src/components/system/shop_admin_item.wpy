@@ -6,7 +6,6 @@
         <text class="lg">{{seller.name ? seller.name : '管理员'}}</text>
         <text class="xs muted">电话：{{seller.phone ? seller.phone : '暂无电话'}}</text></view>
       <view class="row">
-        <image class="icon mr20" src="/images/icons/call.png" @tap.stop="phone"/>
         <button class="zan-btn--small zan-btn zan-btn--danger" @tap.stop="remove({{seller.id}})">删除</button>
       </view>
 

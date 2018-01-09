@@ -1,12 +1,17 @@
 <template>
-  <view class="row app-box">
-    <view class="label-box" @tap.stop="select({{app.id}})">
-      <!-- 改成template的勾选标识符-->
-      <icon class="weui-icon-checkbox_{{!app.check ? 'circle':'success'}}" type="{{!app.check ? 'circle':'success'}}" size="23"></icon>
+  <view class="row-between app-box">
+    <view class="row">
+      <view class="label-box" @tap.stop="select({{app.id}})">
+        <!-- 改成template的勾选标识符-->
+        <icon class="weui-icon-checkbox_{{!app.check ? 'circle':'success'}}" type="{{!app.check ? 'circle':'success'}}" size="23"></icon>
+      </view>
+      <view class="column">
+        <text class="ml20 lg">{{app.appName}}</text>
+        <text class="ml20 xs muted">审核:{{app.auditVersion_text}} 体验:{{app.demoVersion_text}} 上线:{{app.prodVersion_text}}</text>
+      </view>
     </view>
-    <view class="column">
-      <text class="ml20 lg">{{app.appName}}</text>
-      <text class="ml20 xs muted">审核:{{app.auditVersion_text}} 体验:{{app.demoVersion}} 上线:{{app.prodVersion}}</text>
+    <view class="weui-cell__ft img">
+      <image src="/images/icons/qr-code.png" @tap.stop="viewHeadImg({{app.wxAppid}})"/>
     </view>
   </view>
 </template>
@@ -21,6 +26,9 @@
     methods = {
       async select(id) {
         this.$emit('select', id);
+      },
+      viewHeadImg (src) {
+        this.$emit('viewHeadImg', src);
       }
     }
   }
@@ -33,5 +41,14 @@
     background-color: white;
     border-top: $border;
     border-bottom: $border;
+  }
+  .img{
+    width: rpx(50);
+    height: rpx(50);
+    margin: 20rpx;
+    image{
+      width: 100%;
+      height: 100%;
+    }
   }
 </style>

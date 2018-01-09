@@ -127,7 +127,7 @@ export default class open extends base {
   /***
    * 查看体验二维码
    */
-  static qrCode(id) {
+  static async qrCode(id) {
     const url = `${this.openUrl}/code/demo/qr_code?app_id=${id}`;
     return this.get(url);
   }

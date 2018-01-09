@@ -51,8 +51,8 @@
         <view class="weui-cell">
           <view class="weui-cell__bd">二维码</view>
           <view class="weui-cell__ft img">
-            <image src="{{systemDetail.qrcode_url}}" @tap.stop="viewHeadImg({{systemDetail.qrcode_url}})"/>
-          </view>
+          <image src="{{systemDetail.qrcode_url}}" @tap.stop="viewHeadImg({{systemDetail.qrcode_url}})"/>
+        </view>
         </view>
         <view class="weui-cell weui-cell_access" @tap="func">
           <view class="weui-cell__bd">授权信息</view>
@@ -60,11 +60,11 @@
         </view>
         <view class="weui-cell">
           <view class="weui-cell__bd">授权类型</view>
-          <view class="weui-cell__ft">{{systemDetail.type}}</view>
+          <view class="weui-cell__ft">{{systemDetail.type_text}}</view>
         </view>
         <view class="weui-cell">
           <view class="weui-cell__bd">授权状态</view>
-          <view class="weui-cell__ft">{{systemDetail.is_use}}</view>
+          <view class="weui-cell__ft">{{systemDetail.is_use_text}}</view>
         </view>
         <view class="weui-cell">
           <view class="weui-cell__bd">创建时间</view>
