@@ -15,7 +15,7 @@
     </view>
     <view class="box"></view>
     <repeat for="{{apps}}" key="index" index="index" item="item">
-      <App :app.sync="item" @select.user="select"/>
+      <App :app.sync="item" @select.user="select" @viewHeadImg.user="viewHeadImg"/>
     </repeat>
     <view class="box"></view>
     <view class="row-between edit-box">
@@ -26,9 +26,7 @@
       </view>
       <!--不要传递参数-->
       <view class="page__bd">
-        <view>
-          <button class="zan-btn zan-btn&#45;&#45;small delete-box" type="default" @tap="open">批量操作</button>
-        </view>
+        <button class="zan-btn zan-btn--small delete-box" type="default" @tap="open">批量操作</button>
       </view>
     </view>
   </view>
@@ -100,20 +98,17 @@
         this.appTemplateIndex = e.detail.value;
         await this.doLoad(this.key);
       },
-
       async open () {
         const that = this;
         wx.showActionSheet({
-          itemList: ['发布体验版', '查看体验二维码', '发布审核', '查询审核状态', '发布上线'],
+          itemList: ['发布体验版', '发布审核', '查询审核状态', '发布上线'],
           success: async function(res) {
             if (!res.cancel) {
               if (res.tapIndex == 0) {
                 return that.submitDemo()
               } else if (res.tapIndex == 1) {
-                return await that.qrCode()
-              } else if (res.tapIndex == 2) {
                 return await that.audit()
-              } else if (res.tapIndex == 3) {
+              } else if (res.tapIndex == 2) {
                 return await that.status()
               } else {
                 return await that.publish()
@@ -121,6 +116,18 @@
             }
           }
         });
+      },
+      async viewHeadImg (appId) {
+        const url = await open.qrCode(appId);
+        if (url !== null && url !== 'null') {
+          Tips.success('查询成功');
+          wepy.previewImage({
+            current: url.message, // 当前显示图片的http链接
+            urls: [url.message] // 需要浏览的图片http链接列表
+          });
+        } else {
+          Tips.alert('无二维码');
+        }
       }
     };
     async audit() {
@@ -154,28 +161,6 @@
       await Tips.success('发布成功');
       this.loaded();
     };
-
-    async qrCode () {
-      const apps = this.getCheckedApps();
-      if (apps.length == 1) {
-        const id = apps.map(item => {
-          return item.wxAppid;
-        });
-        const url = await open.qrCode(...id);
-        Tips.success('查询成功');
-        wepy.previewImage({
-          current: url.message, // 当前显示图片的http链接
-          urls: [url.message] // 需要浏览的图片http链接列表
-        });
-      } else {
-        wx.showToast({
-          title: '只可选一个',
-          image: '/images/icons/alert.png',
-          mask: true,
-          duration: 1500
-        })
-      }
-    }
     getCheckedApps() {
       const apps = this.apps.filter(item => item.check == true);
       if (apps == null || apps.length < 1) {

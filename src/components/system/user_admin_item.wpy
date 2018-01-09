@@ -1,12 +1,13 @@
 <template>
   <view class="admin-box row" @tap="toEdit({{user.id}})">
-    <image class="icon-xxl avatar mr20" src="{{user.avatar ? user.avatar : '/images/icons/customer.png'}}"/>
-    <view class="column" style="width: 70%">
-      <text class="lg">{{user.name ? user.name : '管理员'}}</text>
-      <text class="xs muted">简介：{{user.note ? user.note : '暂无介绍'}}</text>
-      <view class="phone-box row-between">
-        <text class="xs muted">电话：{{user.phone ? user.phone : '暂无电话'}}</text>
-        <image class="icon ml20" src="/images/icons/call.png" @tap.stop="phone"/>
+    <image class="icon-xl avatar mr20" src="{{user.avatar ? user.avatar : '/images/icons/customer.png'}}"/>
+    <view class="column" style="width: 80%">
+      <view class="row-between">
+        <text class="lg">{{user.name ? user.name : '管理员'}}</text>
+        <text class="xs muted" @tap.stop="phone">电话：{{user.phone ? user.phone : '暂无电话'}}</text>
+      </view>
+      <view>
+        <text class="xs muted">简介：{{user.note ? user.note : '暂无介绍'}}</text>
       </view>
     </view>
   </view>
@@ -37,13 +38,15 @@
 
   .admin-box {
     background-color: white;
-    width: 100%;
-    min-height: rpx(140);
     border-bottom: $border;
-    padding: rpx(30);
+    padding: 20rpx;
+    flex: 1;
     .avatar {
       border-radius: 50%;
       border: 2px solid $color-border;
+      width: 80 rpx;
+      height: 80 rpx;
     }
   }
+
 </style>
