@@ -14,7 +14,7 @@ export default class Tips {
       icon: 'success',
       mask: true,
       duration: duration
-    })
+    });
     if (duration > 0) {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
@@ -159,7 +159,7 @@ export default class Tips {
           const result = {
             index: res.tapIndex,
             text: items[res.tapIndex]
-          }
+          };
           resolve(result)
         },
         fail: function (res) {
@@ -173,7 +173,7 @@ export default class Tips {
     wx.showActionSheet({
       itemList: items,
       success: function (res) {
-        const index = res.tapIndex
+        const index = res.tapIndex;
         if (index >= 0 && index < functions.length) {
           functions[index]()
         }

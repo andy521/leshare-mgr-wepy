@@ -125,6 +125,13 @@ export default class open extends base {
   }
 
   /***
+   * 查看体验二维码
+   */
+  static qrCode(id) {
+    const url = `${this.openUrl}/code/demo/qr_code?app_id=${id}`;
+    return this.get(url);
+  }
+  /***
    * 处理认证状态
    */
   static _processVerifyType(verify) {
