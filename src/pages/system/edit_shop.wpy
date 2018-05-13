@@ -205,8 +205,12 @@
         if (!this.validate()) {
           return;
         }
+        this.shop.avatar = 'http://img.leshare.shop/leshare/logo.jpg';
+        this.shop.autoOrder = this.shop.autoOrder ? 1 : 0;
+        this.shop.offPay = this.shop.offPay ? 1 : 0;
+        this.shop.inShop = this.shop.inShop ? 1 : 0;
+        this.shop.supportMember = this.shop.supportMember ? 1 : 0;
         if (this.mode == 'create') {
-          this.shop.avatar = 'http://img.leshare.shop/leshare/logo.jpg';
           await shop.addShop(this.shop);
         } else {
           const data = {
@@ -223,10 +227,6 @@
               data.images.push(picture);
             }
           }
-          this.shop.autoOrder = this.shop.autoOrder ? 1 : 0;
-          this.shop.offPay = this.shop.offPay ? 1 : 0;
-          this.shop.inShop = this.shop.inShop ? 1 : 0;
-          this.shop.supportMember = this.shop.supportMember ? 1 : 0;
           this.shop.images = data.images;
           await shop.updateShop(this.shop);
         }

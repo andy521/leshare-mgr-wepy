@@ -100,7 +100,6 @@
             remark: this.input.remark,
             auditInfo: this.input.auditInfo
           };
-          console.info(param);
           await system.createLeApp(param);
           await Tips.success('创建成功！');
           Event.emit(Event.SYSTEM_LEAPP_UPDATE);

@@ -22,11 +22,14 @@
       <view class="select-box row" @tap.stop="checkAll">
         <icon class="weui-icon-checkbox_{{!checked ? 'circle':'success'}}" type="{{!checked ? 'circle':'success'}}"
               size="23"></icon>
-        <text class="ml20">全选</text>
+        <text class="ml20 icon-test">全选</text>
       </view>
       <!--不要传递参数-->
       <view class="page__bd">
-        <button class="zan-btn zan-btn--small delete-box" type="default" @tap="open">批量操作</button>
+        <button class="zan-btn zan-btn--small delete-box" type="default" @tap="open">
+          批量操作
+          <text class="iconfont icon-icon"></text>
+        </button>
       </view>
     </view>
   </view>
@@ -190,6 +193,8 @@
 <style lang="scss">
   @import "../../styles/variable";
   @import "../../styles/weui.scss";
+  @import '../../styles/stylesheet.scss';
+
   .app-template-box{
     background-color: #fff;
     position: fixed;
