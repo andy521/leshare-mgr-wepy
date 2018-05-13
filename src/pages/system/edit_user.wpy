@@ -8,8 +8,7 @@
             <view class="weui-label">名称</view>
           </view>
           <view class="weui-cell__bd">
-            <input class="weui-input" name="name" value="{{user.name}}"
-                   type="digit" placeholder="请输入用户名称"/>
+            <input class="weui-input" name="name" value="{{user.name}}" placeholder="请输入用户名称"/>
           </view>
         </view>
         <view class="weui-cell weui-cell_input">
@@ -17,8 +16,7 @@
             <view class="weui-label">电话</view>
           </view>
           <view class="weui-cell__bd">
-            <input class="weui-input" name="phone" value="{{user.phone}}"
-                   type="number" maxlength="11" placeholder="请输入用户电话"/>
+            <input class="weui-input" name="phone" value="{{user.phone}}" placeholder="请输入用户电话"/>
           </view>
         </view>
         <view class="weui-cell weui-cell_input">
@@ -26,8 +24,7 @@
             <view class="weui-label">简介</view>
           </view>
           <view class="weui-cell__bd">
-            <input class="weui-input" name="note" value="{{user.note}}"
-                   type="digit" placeholder="请输用户简介"/>
+            <input class="weui-input" name="note" value="{{user.note}}" placeholder="请输用户简介"/>
           </view>
         </view>
       </view>
@@ -109,11 +106,6 @@
           value: this.user.phone,
           method: 'required',
           message: '用户电话不能为空'
-        },
-        {
-          value: this.user.phone,
-          method: 'tel',
-          message: '请输入正确的手机格式'
         }
       ];
       return this.check(rules);

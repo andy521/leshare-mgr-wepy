@@ -3,7 +3,7 @@
 
     <view class="column">
       <view class="row">
-        <text class="lg">{{draft.user_desc}} </text>
+        <text class="lg" style="max-width: 430rpx;">{{draft.user_desc}} </text>
         <text class="sm muted ml20">#{{draft.draft_id}}</text>
       </view>
 

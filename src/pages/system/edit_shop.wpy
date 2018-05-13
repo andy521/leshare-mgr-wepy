@@ -17,6 +17,18 @@
 
     <view class="weui-cells weui-cells-form">
 
+      <view class="weui-cell weui-cell_select app-template-box">
+        <view class="weui-cell__hd weui-cell__hd_in-select-after">
+          <view class="weui-label">店铺类型</view>
+        </view>
+        <view class="weui-cell__bd">
+          <picker @change="shopChange" value="{{shopTypeIndex}}" range="{{shopType}}"
+                  range-key="{{'name'}}">
+            <view class="weui-select weui-select_in-select-after">{{shopTypeName == null ? '请选择' : shopTypeName}}</view>
+          </picker>
+        </view>
+      </view>
+      
       <view class="weui-cell">
         <view class="weui-cell__bd">店铺分类</view>
         <view class="weui-cell__ft category-box" @tap="show">{{shop.categoryName == null ? '请选择' : shop.categoryName}}</view>
@@ -92,8 +104,7 @@
           <view class="weui-label">联系电话</view>
         </view>
         <view class="weui-cell__bd">
-          <input class="weui-input" id="phone" @input="input" value="{{shop.phone}}" placeholder="请输入电话号码"
-                 maxlength="11"/>
+          <input class="weui-input" id="phone" @input="input" value="{{shop.phone}}" placeholder="请输入电话号码"/>
         </view>
         <view class="weui-cell__ft">
         </view>
@@ -151,7 +162,22 @@
       uploader: false,
       shopId: null,
       mode: 'create',
-      init: false
+      init: false,
+      shopType: [
+        {
+          id: 0,
+          key: 'business',
+          name: '商城'
+        },
+        {
+          id: 1,
+          key: 'food',
+          name: '餐饮'
+        }
+      ],
+      key: 'business',
+      shopTypeIndex: 0,
+      shopTypeName: null
     };
 
     async onLoad (option) {
@@ -172,6 +198,17 @@
         this.shop.categoryName = this.categories
           .find(item => item.id == this.shop.categoryId).name;
         this.pictures = this.shop.images;
+        this.key = this.shop.type;
+        const shopType = this.shopType.map((item, index) => {
+          return {
+            index: index,
+            key: item.key,
+            name: item.name
+          }
+        }).find(item => item.key == this.key);
+        console.info(shopType)
+        this.shopTypeIndex = shopType.index;
+        this.shopTypeName = shopType.name;
       } else {
         this.categories = await shop.getShopCategories();
       }
@@ -184,6 +221,11 @@
       this.$apply();
     };
     methods = {
+      async shopChange(e) {
+        this.key = this.shopType[e.detail.value].key;
+        this.shopTypeIndex = e.detail.value;
+        this.shopTypeName = this.shopType[e.detail.value].name
+      },
       chooseLocation () {
         wepy.chooseLocation({
           type: 'wgs84'
@@ -210,6 +252,7 @@
         this.shop.offPay = this.shop.offPay ? 1 : 0;
         this.shop.inShop = this.shop.inShop ? 1 : 0;
         this.shop.supportMember = this.shop.supportMember ? 1 : 0;
+        this.shop.type = this.key;
         if (this.mode == 'create') {
           await shop.addShop(this.shop);
         } else {
@@ -298,11 +341,6 @@
           value: this.shop.phone,
           method: 'required',
           message: '店铺电话不能为空'
-        },
-        {
-          value: this.shop.phone,
-          method: 'tel',
-          message: '请输入正确的手机格式'
         },
         {
           value: this.shop.address,
