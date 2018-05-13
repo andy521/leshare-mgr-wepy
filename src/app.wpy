@@ -55,11 +55,11 @@
       auth: {
         login_code: 'fgQBEGfwJrqzt9uDcRD31qHDfGdt68Pe'
       },
-//      app_code: '8ZXSbN4YbolpqKk93VYPc5iUaSRk1ied',
-//      openUrl: 'https://wx.leshare.shop/open',
-//      systemUrl: 'https://api.leshare.shop/v2/system'
-      openUrl: 'http://106.14.195.68:8989/open',
-      systemUrl: 'http://106.14.195.68:9999/v2/system'
+      app_code: '8ZXSbN4YbolpqKk93VYPc5iUaSRk1ied',
+      openUrl: 'https://wx.leshare.shop/open',
+      systemUrl: 'https://api.leshare.shop/v2/system'
+//       openUrl: 'http://106.14.195.68:8989/open',
+//       systemUrl: 'http://106.14.195.68:9999/v2/system'
     };
     config = {
       pages: [

@@ -24,7 +24,6 @@
   import ActionBar from '../../components/common/action_bar';
   import Loadmore from '../../components/weui/loadmore';
   import Event from '../../utils/Event';
-  import shop from '../../api/shop';
 
   export default class LeAppList extends wepy.page {
     data = {
