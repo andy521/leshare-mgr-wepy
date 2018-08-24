@@ -168,9 +168,13 @@
     };
     async revert() {
       const apps = this.getCheckedApps();
-      await Tips.confirm('确定要回退该版本？');
-      await open.revert(apps[0].wxAppid);
-      await Tips.success('回退成功');
+      if (apps.length > 1) {
+        await Tips.modal('单次只可回退一个小程序');
+      } else {
+        await Tips.confirm('确定要回退该版本？');
+        await open.revert(apps[0].wxAppid);
+        await Tips.success('回退成功');
+      }
       this.loaded();
     };
     getCheckedApps() {
