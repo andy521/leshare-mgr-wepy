@@ -40,8 +40,8 @@
   import base from '../../mixins/base';
   import open from '../../api/open';
   import App from '../../components/open/app';
-  import Tips from '../../utils/Tips'
-  import Event from '../../utils/Event'
+  import Tips from '../../utils/Tips';
+  import Event from '../../utils/Event';
 
   export default class AppList extends wepy.page {
     data= {
@@ -104,7 +104,7 @@
       async open () {
         const that = this;
         wx.showActionSheet({
-          itemList: ['发布体验版', '发布审核', '查询审核状态', '发布上线'],
+          itemList: ['发布体验版', '发布审核', '查询审核状态', '发布上线', '版本回退'],
           success: async function(res) {
             if (!res.cancel) {
               if (res.tapIndex == 0) {
@@ -113,8 +113,10 @@
                 return await that.audit()
               } else if (res.tapIndex == 2) {
                 return await that.status()
-              } else {
+              } else if (res.tapIndex == 3) {
                 return await that.publish()
+              } else if (res.tapIndex == 4) {
+                return await that.revert()
               }
             }
           }
@@ -162,6 +164,13 @@
       await Tips.confirm('确定要发布该版本？');
       await open.publish(apps);
       await Tips.success('发布成功');
+      this.loaded();
+    };
+    async revert() {
+      const apps = this.getCheckedApps();
+      await Tips.confirm('确定要回退该版本？');
+      await open.revert(apps[0].wxAppid);
+      await Tips.success('回退成功');
       this.loaded();
     };
     getCheckedApps() {

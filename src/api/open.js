@@ -123,6 +123,13 @@ export default class open extends base {
     const url = `${this.openUrl}/code/publish`;
     return this.post(url, apps)
   }
+  /***
+   * 版本回退
+   */
+  static revert(appId) {
+    const url = `${this.openUrl}/code/revert?app_id=${appId}`;
+    return this.post(url)
+  }
 
   /***
    * 查看体验二维码
